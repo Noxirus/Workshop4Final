@@ -19,7 +19,8 @@ namespace BrogrammersWorkshop
         
         private List<Packages> pack = PackagesDB.GetPackages();
         private List<PackagesProductInfo> packProdSupp = Packages_Products_SuppliersDB.GetPackProductsSuppliers();
-        
+        private List<int> prod = ProductsDB.GetProductID();
+        private List<int> supp = SuppliersDB.GetSupplierIDs();
         
         
 
@@ -35,6 +36,14 @@ namespace BrogrammersWorkshop
                 lstPkg.Items.Add(pkg.PkgName);
             }
 
+           
+
+            foreach (var supItem in supp)
+            {
+                lstSupplier.Items.Add(SuppliersDB.GetSupplier(supItem).SupName);
+            }
+
+            ResetProductList();
 
 
 
@@ -307,6 +316,113 @@ namespace BrogrammersWorkshop
         private void metroTabPage1_Click(object sender, EventArgs e)
         {
             lstPkg.Enabled = true;
+        }
+
+        private void lstProducts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnAddProduct_Click(object sender, EventArgs e)
+        {
+            btnAddSaveProd.Visible = true;
+            lblProdName.Visible = true;
+            txtProductName.Visible = true;
+
+            btnEditProducts.Enabled = false;
+            txtProductName.Focus();
+
+        }
+
+        private void btnAddSaveProd_Click(object sender, EventArgs e)
+        {
+            Products prodAdd = new Products();
+
+            prodAdd.ProdName = txtProductName.Text;
+
+            ProductsDB.AddProduct(prodAdd);
+
+            ResetProductList();
+
+        }
+
+
+
+
+        public void ResetProductList()
+        {
+            lstProducts.Items.Clear();
+             List<int> prod1 = ProductsDB.GetProductID();
+            foreach (var prdItem in prod1)
+            {
+                lstProducts.Items.Add(ProductsDB.GetProduct(prdItem).ProdName);
+            }
+
+            btnAddSaveProd.Visible = false;
+            lblProdName.Visible = false;
+            txtProductName.Visible = false;
+            btnUpdateProduct.Visible = false;
+            btnEditProducts.Enabled = true;
+            btnAddProduct.Enabled = true;
+            lstProducts.Enabled = true;
+
+
+            btnSaveAddSupp.Visible = false;
+            lblSupplierName.Visible = false;
+            txtSupplier.Visible = false;
+            btnUpdateSupplier.Visible = false;
+        }
+
+        private void btnResetProduct_Click(object sender, EventArgs e)
+        {
+            ResetProductList();
+        }
+
+        private void btnEditProducts_Click(object sender, EventArgs e)
+        {   
+            if (lstProducts.SelectedItem == null)
+            {
+                MessageBox.Show("Please Select a Product to edit");
+
+            }
+            else
+            {
+                txtProductName.Visible = true;
+                btnUpdateProduct.Visible = true;
+                lblProdName.Visible = true;
+                btnAddProduct.Enabled = false;
+                lstProducts.Enabled = false;
+
+                txtProductName.Focus();
+                txtProductName.Text = lstProducts.SelectedItem.ToString();
+
+                
+
+
+            }
+           
+        }
+
+        private void btnUpdateProduct_Click(object sender, EventArgs e)
+        {
+            foreach (var item in prod)
+            {
+
+                if (lstProducts.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
+                {
+                    Products updatedProdcut = new Products();
+
+                    updatedProdcut.ProductID = item;
+                    updatedProdcut.ProdName = txtProductName.Text;
+
+
+                    ProductsDB.UpdateProduct(item, updatedProdcut);
+                    MessageBox.Show("Product Updated");
+
+                    ResetProductList();
+
+                }
+            }
         }
     }
 }
