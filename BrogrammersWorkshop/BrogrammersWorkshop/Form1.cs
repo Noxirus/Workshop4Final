@@ -44,6 +44,7 @@ namespace BrogrammersWorkshop
             }
 
             ResetProductList();
+            ResetSupplierList();
 
 
 
@@ -334,6 +335,17 @@ namespace BrogrammersWorkshop
 
         }
 
+        private void btnAddSupplier_Click(object sender, EventArgs e)
+        {
+            
+            lblSupplierName.Visible = true;
+            txtSupplier.Visible = true;
+            btnSaveAddSupp.Visible = true;
+            btnEditSupplier.Enabled = false;
+            txtSupplier.Focus();
+
+        }
+
         private void btnAddSaveProd_Click(object sender, EventArgs e)
         {
             Products prodAdd = new Products();
@@ -343,6 +355,27 @@ namespace BrogrammersWorkshop
             ProductsDB.AddProduct(prodAdd);
 
             ResetProductList();
+            
+            
+
+        }
+
+        private void btnSaveAddSupp_Click(object sender, EventArgs e)
+        {
+            Suppliers suppAdd = new Suppliers();
+
+            var newsuppindex = supp[supp.Count - 1] + 1;
+
+            suppAdd.SupplierID= newsuppindex ;
+
+            suppAdd.SupName = txtSupplier.Text;
+
+            SuppliersDB.AddSupplier(suppAdd);
+
+            MessageBox.Show("Supplier has been Added");
+
+            ResetSupplierList();
+
 
         }
 
@@ -365,13 +398,44 @@ namespace BrogrammersWorkshop
             btnEditProducts.Enabled = true;
             btnAddProduct.Enabled = true;
             lstProducts.Enabled = true;
+            btnAddProduct.Visible = true;
+            btnAddProduct.Visible = true;
 
 
-            btnSaveAddSupp.Visible = false;
+        }
+
+
+        public void ResetSupplierList()
+        {
+            lstSupplier.Items.Clear();
+
+            List<int> supp1 = SuppliersDB.GetSupplierIDs();
+
+            foreach (var supItem in supp1)
+            {
+                lstSupplier.Items.Add(SuppliersDB.GetSupplier(supItem).SupName);
+            }
+
+            btnAddSupplier.Visible = true;
+            btnAddSupplier.Enabled = true;
+            btnEditSupplier.Visible = true;
+            btnEditSupplier.Enabled = true;
+
             lblSupplierName.Visible = false;
             txtSupplier.Visible = false;
+            btnSaveAddSupp.Visible = false;
             btnUpdateSupplier.Visible = false;
+            lstSupplier.Enabled = true;
         }
+
+        private void btnResetSupplier_Click(object sender, EventArgs e)
+        {
+            ResetSupplierList();
+
+        }
+
+
+
 
         private void btnResetProduct_Click(object sender, EventArgs e)
         {
@@ -403,6 +467,30 @@ namespace BrogrammersWorkshop
            
         }
 
+        private void btnEditSupplier_Click(object sender, EventArgs e)
+        {
+            if (lstSupplier.SelectedItem == null)
+            {
+                MessageBox.Show("Please Select a  Supplier to edit");
+
+            }
+            else
+            {
+                txtSupplier.Visible = true;
+                btnUpdateSupplier.Visible = true;
+                lblSupplierName.Visible = true;
+                btnAddSupplier.Enabled = false;
+                lstSupplier.Enabled = false;
+
+                txtSupplier.Focus();
+                txtSupplier.Text = lstSupplier.SelectedItem.ToString();
+
+
+
+
+            }
+        }
+
         private void btnUpdateProduct_Click(object sender, EventArgs e)
         {
             foreach (var item in prod)
@@ -419,10 +507,42 @@ namespace BrogrammersWorkshop
                     ProductsDB.UpdateProduct(item, updatedProdcut);
                     MessageBox.Show("Product Updated");
 
-                    ResetProductList();
+                   
 
                 }
+
             }
+
+            ResetProductList();
         }
+
+        private void btnUpdateSupplier_Click(object sender, EventArgs e)
+        {
+            foreach (var item in supp)
+            {
+
+                if (lstSupplier.SelectedItem.ToString() == SuppliersDB.GetSupplier(item).SupName)
+                {
+                    Suppliers updatedSupplier = new Suppliers();
+
+                   
+                    updatedSupplier.SupplierID = item;
+                    updatedSupplier.SupName = txtSupplier.Text;
+
+                    SuppliersDB.UpdateSupplier(item, updatedSupplier);
+
+                   
+                    MessageBox.Show("Supplier Updated");
+
+                    
+
+                }
+
+
+            }
+            ResetSupplierList();
+        }
+
+      
     }
 }
