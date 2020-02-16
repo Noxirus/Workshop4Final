@@ -19,10 +19,15 @@ namespace BrogrammersWorkshop
         
         private List<Packages> pack = PackagesDB.GetPackages();
         private List<PackagesProductInfo> packProdSupp = Packages_Products_SuppliersDB.GetPackProductsSuppliers();
+        private List<PackagesProductInfo> productSupplierList = Products_SuppliersDB.GetProductsSuppliers();
         private List<int> prod = ProductsDB.GetProductID();
         private List<int> supp = SuppliersDB.GetSupplierIDs();
-        
-        
+        List<string> product = new List<string>();
+        List<string> supplier= new List<string>();
+
+           
+
+
 
 
     private void TravelExpert_Load(object sender, EventArgs e)
@@ -36,12 +41,39 @@ namespace BrogrammersWorkshop
                 lstPkg.Items.Add(pkg.PkgName);
             }
 
-           
+            gridProductSuppliers.DataSource = productSupplierList;
 
-            foreach (var supItem in supp)
+            gridProductSuppliers.Columns[0].Visible = false;
+
+            foreach (var prd in prod)
             {
-                lstSupplier.Items.Add(SuppliersDB.GetSupplier(supItem).SupName);
+                product.Add(ProductsDB.GetProduct(prd).ProdName);
             }
+
+            foreach (var sup in supp)
+            {
+                supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
+            }
+
+            comboProduct.DataSource = product;
+            comboSupplier.DataSource = supplier;
+
+            gridProductSuppliers.Columns[1].HeaderText = "Product Supplier ID";
+            gridProductSuppliers.Columns[2].HeaderText = "Product Name";
+            gridProductSuppliers.Columns[3].HeaderText = "Supplier Name";
+            gridProductSuppliers.Columns[1].Width = 180;
+            gridProductSuppliers.Columns[2].Width = 300;
+            gridProductSuppliers.Columns[3].Width = 300;
+            gridProductSuppliers.ClearSelection();
+
+
+
+
+            //foreach (var supItem in supp)
+            //{
+            //    lstSupplier.Items.Add(SuppliersDB.GetSupplier(supItem).SupName);
+
+            //}
 
             ResetProductList();
             ResetSupplierList();
@@ -493,56 +525,122 @@ namespace BrogrammersWorkshop
 
         private void btnUpdateProduct_Click(object sender, EventArgs e)
         {
+            updateProductname(lstProducts.SelectedItem.ToString(), txtProductName.Text);
+            
+            ResetProductList();
+        }
+        
+
+        private void btnUpdateSupplier_Click(object sender, EventArgs e)
+        {
+            updateSupplierName(lstSupplier.SelectedItem.ToString(), txtSupplier.Text);
+            ResetSupplierList();
+        }
+
+        
+
+        private void saveProdSup_Click(object sender, EventArgs e)
+        {
+            Products_Suppliers addPrdSupp = new Products_Suppliers();
+
+            foreach (var item in prod)
+            {
+                
+
+                if (comboProduct.SelectedItem.ToString()==ProductsDB.GetProduct(item).ProdName )
+                {
+                    addPrdSupp.ProductId = item;
+                }
+
+            }
+
+            foreach (var item in supp)
+            {
+                
+
+                if (comboSupplier.SelectedItem.ToString() == SuppliersDB.GetSupplier(item).SupName)
+                {
+                    addPrdSupp.SupplierId = item;
+                }
+
+            }
+
+        
+        }
+        public void updateProductname(string prdName, string updatedprdName)
+        {
             foreach (var item in prod)
             {
 
-                if (lstProducts.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
+                if (prdName == ProductsDB.GetProduct(item).ProdName)
                 {
                     Products updatedProdcut = new Products();
 
                     updatedProdcut.ProductID = item;
-                    updatedProdcut.ProdName = txtProductName.Text;
+                    updatedProdcut.ProdName = updatedprdName;
 
 
                     ProductsDB.UpdateProduct(item, updatedProdcut);
                     MessageBox.Show("Product Updated");
 
-                   
+
 
                 }
 
             }
-
-            ResetProductList();
         }
-
-        private void btnUpdateSupplier_Click(object sender, EventArgs e)
+        public void updateSupplierName(string supplierName,string updatedsupplierName)
         {
             foreach (var item in supp)
             {
 
-                if (lstSupplier.SelectedItem.ToString() == SuppliersDB.GetSupplier(item).SupName)
+                if (supplierName == SuppliersDB.GetSupplier(item).SupName)
                 {
                     Suppliers updatedSupplier = new Suppliers();
 
-                   
+
                     updatedSupplier.SupplierID = item;
-                    updatedSupplier.SupName = txtSupplier.Text;
+                    updatedSupplier.SupName = updatedsupplierName;
 
                     SuppliersDB.UpdateSupplier(item, updatedSupplier);
 
-                   
+
                     MessageBox.Show("Supplier Updated");
 
-                    
+
 
                 }
 
 
             }
-            ResetSupplierList();
         }
 
-      
+        private void btnEditAddProductSupplier_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var supplierproductID = gridProductSuppliers.CurrentRow.Cells[1].Value.ToString();
+                txtPrdSupPrdName.Text=gridProductSuppliers.CurrentRow.Cells[2].Value.ToString();
+                txtAddSupSupName.Text = gridProductSuppliers.CurrentRow.Cells[3].Value.ToString();
+                
+            }
+
+            catch
+            {
+                MessageBox.Show("Please Select an item ");
+            }
+            
+        }
+
+        private void btnAddPrdSaveEdit_Click(object sender, EventArgs e)
+        {
+            updateProductname(gridProductSuppliers.CurrentRow.Cells[2].Value.ToString(), txtPrdSupPrdName.Text);
+            updateSupplierName(gridProductSuppliers.CurrentRow.Cells[3].Value.ToString(), txtAddSupSupName.Text);
+            MessageBox.Show("Data Updated");
+
+            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+            ResetProductList();
+            ResetSupplierList();
+        }
     }
 }
