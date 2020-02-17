@@ -532,7 +532,7 @@ namespace BrogrammersWorkshop
             foreach (var item in prod)
             {
 
-                var newproductSupplierID = Convert.ToInt32(gridProductSuppliers.Rows[gridProductSuppliers.RowCount - 1]);
+               // var newproductSupplierID = Convert.ToInt32(gridProductSuppliers.Rows[gridProductSuppliers.RowCount - 1]);
                 //newproductSupplierID = gridProductSuppliers.Rows[newproductSupplierID].Cells[0].Value;
 
                 if (comboProduct.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
