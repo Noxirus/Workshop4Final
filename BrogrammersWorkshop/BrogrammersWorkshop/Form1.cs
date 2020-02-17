@@ -71,7 +71,7 @@ namespace BrogrammersWorkshop
                 }
             }
 
-
+            
 
             gridProductSuppliers.Columns[1].HeaderText = "Product Supplier ID";
             gridProductSuppliers.Columns[2].HeaderText = "Product Name";
@@ -178,6 +178,7 @@ namespace BrogrammersWorkshop
 
             lstPkg.SelectedIndex =0;
             lstPkg.Enabled = true;
+        
             PackProductUpdate();
 
 
@@ -249,6 +250,9 @@ namespace BrogrammersWorkshop
 
             PackagesDB.UpdatePackage(oldPck, updtPck);
             MessageBox.Show("Packages has been updated");
+
+
+            
 
             ResetPackage();
         }
@@ -532,7 +536,7 @@ namespace BrogrammersWorkshop
             foreach (var item in prod)
             {
 
-                var newproductSupplierID = Convert.ToInt32(gridProductSuppliers.Rows[gridProductSuppliers.RowCount - 1]);
+                //var newproductSupplierID = Convert.ToInt32(gridProductSuppliers.Rows[gridProductSuppliers.RowCount - 1]);
                 //newproductSupplierID = gridProductSuppliers.Rows[newproductSupplierID].Cells[0].Value;
 
                 if (comboProduct.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
@@ -800,15 +804,26 @@ namespace BrogrammersWorkshop
             lstPkg.SelectedIndex = 0;
             pkgProductAdd.Enabled = true;
             pkgProductDelete.Enabled = true;
+          
 
             PackageListLoad();
+         
 
            
         }
 
         public void PackageListLoad()
         {
+           
+            var pack= PackagesDB.GetPackages();
 
+            foreach (var pkg in pack)
+            {
+
+                lstPkg.Items.Add(pkg.PkgName);
+            }
+
+            
             foreach (var item in pack)
             {
 
