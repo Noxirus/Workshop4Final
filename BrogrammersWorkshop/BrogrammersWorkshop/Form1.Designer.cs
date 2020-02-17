@@ -88,6 +88,7 @@
             this.lstSupplier = new System.Windows.Forms.ListBox();
             this.lstProducts = new System.Windows.Forms.ListBox();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.btnDeleteProdSupplier = new MetroFramework.Controls.MetroButton();
             this.lblProductSupplierName = new MetroFramework.Controls.MetroLabel();
             this.lblProductName = new MetroFramework.Controls.MetroLabel();
             this.btnAddPrdSaveEdit = new MetroFramework.Controls.MetroButton();
@@ -101,7 +102,6 @@
             this.addProdSupp = new MetroFramework.Controls.MetroButton();
             this.gridProductSuppliers = new MetroFramework.Controls.MetroGrid();
             this.gridPkgPrd = new MetroFramework.Controls.MetroGrid();
-            this.btnDeleteProdSupplier = new MetroFramework.Controls.MetroButton();
             this.Packages.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridprdpkg)).BeginInit();
@@ -158,7 +158,7 @@
             this.metroTabPage1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.metroTabPage1.HorizontalScrollbarBarColor = true;
             this.metroTabPage1.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage1.HorizontalScrollbarSize = 45;
+            this.metroTabPage1.HorizontalScrollbarSize = 48;
             this.metroTabPage1.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage1.Name = "metroTabPage1";
             this.metroTabPage1.Padding = new System.Windows.Forms.Padding(5);
@@ -932,6 +932,16 @@
             this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage2.VerticalScrollbarSize = 10;
             // 
+            // btnDeleteProdSupplier
+            // 
+            this.btnDeleteProdSupplier.Location = new System.Drawing.Point(431, 25);
+            this.btnDeleteProdSupplier.Name = "btnDeleteProdSupplier";
+            this.btnDeleteProdSupplier.Size = new System.Drawing.Size(146, 30);
+            this.btnDeleteProdSupplier.TabIndex = 14;
+            this.btnDeleteProdSupplier.Text = "Delete Product Supplier";
+            this.btnDeleteProdSupplier.UseSelectable = true;
+            this.btnDeleteProdSupplier.Click += new System.EventHandler(this.btnDeleteProdSupplier_Click);
+            // 
             // lblProductSupplierName
             // 
             this.lblProductSupplierName.AutoSize = true;
@@ -1176,15 +1186,6 @@
             this.gridPkgPrd.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridPkgPrd.Size = new System.Drawing.Size(581, 137);
             this.gridPkgPrd.TabIndex = 18;
-            // 
-            // btnDeleteProdSupplier
-            // 
-            this.btnDeleteProdSupplier.Location = new System.Drawing.Point(431, 25);
-            this.btnDeleteProdSupplier.Name = "btnDeleteProdSupplier";
-            this.btnDeleteProdSupplier.Size = new System.Drawing.Size(146, 30);
-            this.btnDeleteProdSupplier.TabIndex = 14;
-            this.btnDeleteProdSupplier.Text = "Delete Product Supplier";
-            this.btnDeleteProdSupplier.UseSelectable = true;
             // 
             // TravelExpert
             // 

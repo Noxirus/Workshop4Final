@@ -54,7 +54,7 @@ namespace BrogrammersWorkshop
             {
                 supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
             }
-            ResetPrdSupplierPage();
+           
 
             var distinctPrd = productSupplierList.Select(o => o.ProdName).Distinct().ToList();
             comboPrdPack.DataSource = distinctPrd;
@@ -81,10 +81,10 @@ namespace BrogrammersWorkshop
             gridProductSuppliers.Columns[3].Width = 300;
             gridProductSuppliers.ClearSelection();
 
-            lstPkg.SelectedIndex = 0;
+            ResetPrdSupplierPage();
             ResetProductList();
             ResetSupplierList();
-           // PackageListLoad();
+        
 
 
         }
@@ -139,7 +139,10 @@ namespace BrogrammersWorkshop
             lstPkg.Enabled=false;
             pkgADD.Enabled = false;
             pkgProductAdd.Enabled = false;
-            pkgProductDelete.Enabled = false; 
+            pkgProductDelete.Enabled = false;
+            lstPkg.Visible = false;
+            lblavalpkg.Visible = false;
+
         }
         // saving Added Packges **NEED VALIDATION OF DATA
         private void pkgSave_Click(object sender, EventArgs e)
@@ -178,8 +181,17 @@ namespace BrogrammersWorkshop
 
             lstPkg.SelectedIndex =0;
             lstPkg.Enabled = true;
-        
-            PackProductUpdate();
+
+            lstPkg.Items.Clear();
+            List<Packages> packupdated = PackagesDB.GetPackages();
+
+            foreach (var pkg in packupdated)
+            {
+
+                lstPkg.Items.Add(pkg.PkgName);
+            }
+
+            lstPkg.SelectedIndex = 0;
 
 
 
@@ -202,8 +214,8 @@ namespace BrogrammersWorkshop
             pkgSave.Enabled = false;
             pkgCancel.Enabled = true;
             saveEdit.Visible = true;
-            pkgProductAdd.Enabled = false;
-            pkgProductDelete.Enabled = false;
+            pkgProductAdd.Enabled = true;
+            pkgProductDelete.Enabled = true;
 
         }
         // Save Edit Packages ** Need Validation of Data
@@ -250,9 +262,17 @@ namespace BrogrammersWorkshop
 
             PackagesDB.UpdatePackage(oldPck, updtPck);
             MessageBox.Show("Packages has been updated");
+            lstPkg.Items.Clear();
+             List<Packages> packupdated = PackagesDB.GetPackages();
 
+            foreach (var pkg in packupdated)
+            {
 
-            
+                lstPkg.Items.Add(pkg.PkgName);
+            }
+
+            lstPkg.SelectedIndex=0;
+
 
             ResetPackage();
         }
@@ -362,7 +382,9 @@ namespace BrogrammersWorkshop
 
             ProductsDB.AddProduct(prodAdd);
 
+            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
             ResetProductList();
+           
             
             
 
@@ -382,6 +404,8 @@ namespace BrogrammersWorkshop
 
             MessageBox.Show("Supplier has been Added");
 
+            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+        
             ResetSupplierList();
 
 
@@ -502,14 +526,18 @@ namespace BrogrammersWorkshop
         private void btnUpdateProduct_Click(object sender, EventArgs e)
         {
             updateProductname(lstProducts.SelectedItem.ToString(), txtProductName.Text);
-            
+          
+            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
             ResetProductList();
+          
         }
         
 
         private void btnUpdateSupplier_Click(object sender, EventArgs e)
         {
             updateSupplierName(lstSupplier.SelectedItem.ToString(), txtSupplier.Text);
+            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+
             ResetSupplierList();
         }
 
@@ -519,46 +547,50 @@ namespace BrogrammersWorkshop
         {
             ResetPrdSupplierPage();
 
-            //try
-            // {
-
-
-            // }
-
-            // catch
-            // {
-            //     MessageBox.Show("Same Product Supplier Already Exist");
-            // }
-            Products_Suppliers addPrdSupp = new Products_Suppliers();
-
-
-
-            foreach (var item in prod)
+            try
             {
+                Products_Suppliers addPrdSupp = new Products_Suppliers();
 
-                //var newproductSupplierID = Convert.ToInt32(gridProductSuppliers.Rows[gridProductSuppliers.RowCount - 1]);
-                //newproductSupplierID = gridProductSuppliers.Rows[newproductSupplierID].Cells[0].Value;
 
-                if (comboProduct.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
+
+                foreach (var item in prod)
                 {
-                    addPrdSupp.ProductId = item;
+
+                    //var newproductSupplierID = Convert.ToInt32(gridProductSuppliers.Rows[gridProductSuppliers.RowCount - 1]);
+                    //newproductSupplierID = gridProductSuppliers.Rows[newproductSupplierID].Cells[0].Value;
+
+                    if (comboProduct.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
+                    {
+                        addPrdSupp.ProductId = item;
+                    }
+
                 }
+
+                foreach (var item in supp)
+                {
+
+
+                    if (comboSupplier.SelectedItem.ToString() == SuppliersDB.GetSupplier(item).SupName)
+                    {
+                        addPrdSupp.SupplierId = item;
+                    }
+
+                }
+
+                Products_SuppliersDB.AddProdSupplier(addPrdSupp);
+                MessageBox.Show("Product Supplier Added");
+                gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+                ResetProductList();
+                ResetSupplierList();
+                ResetPrdSupplierPage();
 
             }
 
-            foreach (var item in supp)
+            catch
             {
-
-
-                if (comboSupplier.SelectedItem.ToString() == SuppliersDB.GetSupplier(item).SupName)
-                {
-                    addPrdSupp.SupplierId = item;
-                }
-
+                MessageBox.Show("Same Product Supplier Already Exist");
             }
 
-            Products_SuppliersDB.AddProdSupplier(addPrdSupp);
-            MessageBox.Show("Product Supplier Added");
 
 
 
@@ -804,7 +836,23 @@ namespace BrogrammersWorkshop
             lstPkg.SelectedIndex = 0;
             pkgProductAdd.Enabled = true;
             pkgProductDelete.Enabled = true;
+            lstPkg.Visible = true;
+            lblavalpkg.Visible = true;
+
+            txtPkgName.ReadOnly = true;
+
+            txtPkgStrt.ReadOnly = true;
           
+       
+            txtPkgEndDate.ReadOnly = true;
+            txtBasePrice.ReadOnly = true;
+
+            txtCommission.ReadOnly = true;
+            txtDesc.ReadOnly = true;
+
+            txtCommission.ReadOnly = true;
+
+
 
             PackageListLoad();
          
@@ -817,12 +865,7 @@ namespace BrogrammersWorkshop
            
             var pack= PackagesDB.GetPackages();
 
-            foreach (var pkg in pack)
-            {
-
-                lstPkg.Items.Add(pkg.PkgName);
-            }
-
+           
             
             foreach (var item in pack)
             {
@@ -906,6 +949,11 @@ namespace BrogrammersWorkshop
             comboProduct.Visible = true;
             comboSupplier.Visible = true;
             resetPrdSup.Enabled = true;
+        }
+
+        private void btnDeleteProdSupplier_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
