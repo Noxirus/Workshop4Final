@@ -525,32 +525,36 @@ namespace BrogrammersWorkshop
             // {
             //     MessageBox.Show("Same Product Supplier Already Exist");
             // }
-            //Products_Suppliers addPrdSupp = new Products_Suppliers();
-
-            //foreach (var item in prod)
-            //{
+            Products_Suppliers addPrdSupp = new Products_Suppliers();
 
 
-            //    if (comboProduct.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
-            //    {
-            //        addPrdSupp.ProductId = item;
-            //    }
 
-            //}
+            foreach (var item in prod)
+            {
 
-            //foreach (var item in supp)
-            //{
+                var newproductSupplierID = Convert.ToInt32(gridProductSuppliers.Rows[gridProductSuppliers.RowCount - 1]);
+                //newproductSupplierID = gridProductSuppliers.Rows[newproductSupplierID].Cells[0].Value;
+
+                if (comboProduct.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
+                {
+                    addPrdSupp.ProductId = item;
+                }
+
+            }
+
+            foreach (var item in supp)
+            {
 
 
-            //    if (comboSupplier.SelectedItem.ToString() == SuppliersDB.GetSupplier(item).SupName)
-            //    {
-            //        addPrdSupp.SupplierId = item;
-            //    }
+                if (comboSupplier.SelectedItem.ToString() == SuppliersDB.GetSupplier(item).SupName)
+                {
+                    addPrdSupp.SupplierId = item;
+                }
 
-            //}
+            }
 
-            //Products_SuppliersDB.AddProdSupplier(addPrdSupp);
-            //MessageBox.Show("Product Supplier Added");
+            Products_SuppliersDB.AddProdSupplier(addPrdSupp);
+            MessageBox.Show("Product Supplier Added");
 
 
 
