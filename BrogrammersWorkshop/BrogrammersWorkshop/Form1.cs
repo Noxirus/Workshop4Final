@@ -63,21 +63,15 @@ namespace BrogrammersWorkshop
 
             var lstsup = new List<string>();
             foreach (var supname in productSupplierList)
-            { 
-                if (supname.ProdName== comboPrdPack.SelectedItem.ToString())
+            {
+                if (supname.ProdName == comboPrdPack.SelectedItem.ToString())
                 {
                     listSuppPkg.Items.Add(supname.SupName);
 
                 }
             }
 
-           
 
-
-            
-
-
-          
 
             gridProductSuppliers.Columns[1].HeaderText = "Product Supplier ID";
             gridProductSuppliers.Columns[2].HeaderText = "Product Name";
@@ -87,108 +81,36 @@ namespace BrogrammersWorkshop
             gridProductSuppliers.Columns[3].Width = 300;
             gridProductSuppliers.ClearSelection();
 
-
-
-
-            //foreach (var supItem in supp)
-            //{
-            //    lstSupplier.Items.Add(SuppliersDB.GetSupplier(supItem).SupName);
-
-            //}
-
+            lstPkg.SelectedIndex = 0;
             ResetProductList();
             ResetSupplierList();
-
+           // PackageListLoad();
 
 
         }
 
         private void lstPkg_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (var item in pack)
-            {
-
-                if(item.PkgName==lstPkg.SelectedItem.ToString())
-                {
-                    
-                    var  pkgId = item.PackageId;
-                    txtPkgName.Text = item.PkgName;
-                    txtpkgID.Text = item.PackageId.ToString();
-                    txtDesc.Text = item.PkgDesc;
-                    txtBasePrice.Text = item.PkgBasePrice.ToString("c");
-                    txtCommission.Text = item.PkgAgencyCommission.ToString("c");
-
-                    if(item.PkgStartDate.HasValue)
-                    {
-                        txtPkgStrt.Text = item.PkgStartDate.Value.ToShortDateString();
-                    }
-                    else
-                    {
-                        txtPkgStrt.Text = "";
-                    }
+            PackageListLoad();
 
 
-                    if (item.PkgEndDate.HasValue)
-                    {
-                        txtPkgEndDate.Text = item.PkgEndDate.Value.ToShortDateString();
-                    }
-                    else
-                    {
-                        txtPkgEndDate.Text = "";
-                    }
-                    
-                }
 
-          
+            PackProductUpdate();
+        }
 
 
-            }
+        private void PackProductUpdate()
+        {
+            var prodpacklistupdate = Packages_Products_SuppliersDB.GetPackProductsSuppliers();
 
-            List<object> pkgPrd = new List<object>();
+            var listProdPack = from prod in prodpacklistupdate
+                               where prod.PackageId == Convert.ToInt32(txtpkgID.Text)
+                               select new { prod.ProdName, prod.SupName };
 
-            foreach (var pkg in pack)
-            {
-                if (pkg.PkgName == lstPkg.SelectedItem.ToString())
-                {
-                    gridprdpkg.Visible = true;
-                    foreach ( var prdSup in packProdSupp)
-                    {
-                        if (prdSup.PackageId==pkg.PackageId)
-                        {
-                            pkgPrd.Add(prdSup);
-                        }
-                    }
-
-
-                 }
-            }
-
-            foreach (var prdSup in packProdSupp)
-            {
-                if (prdSup.PackageId == Convert.ToInt32(txtpkgID.Text))
-                {
-                    gridprdpkg.DataSource = pkgPrd;
-                    gridprdpkg.Columns[0].Visible = false;
-                    gridprdpkg.Columns[1].Visible = false;
-                    gridprdpkg.Columns[2].HeaderText = "Product Name";
-                    gridprdpkg.Columns[3].HeaderText = "Supplier Name";
-                    gridprdpkg.Columns[2].Width = 200;
-                    gridprdpkg.Columns[3].Width = 200;
-               
-                }
-
-                else
-                {
-
-                    gridprdpkg.Visible = true;
-                }
-               
-            }
-
-           
-
-
-        
+            listProdPack.ToList();
+            gridprdpkg.DataSource = listProdPack.ToList();
+            gridprdpkg.Columns[0].HeaderText = "Product Name";
+            gridprdpkg.Columns[1].HeaderText = "Supplier Name";
 
         }
 
@@ -215,6 +137,7 @@ namespace BrogrammersWorkshop
             gridprdpkg.DataSource = null;
             gridprdpkg.Rows.Clear();
             lstPkg.Enabled=false;
+            pkgADD.Enabled = false;
         }
 
         private void pkgSave_Click(object sender, EventArgs e)
@@ -251,7 +174,9 @@ namespace BrogrammersWorkshop
                 lstPkg.Items.Add(pkg.PkgName);
             }
 
-            
+            lstPkg.SelectedIndex =0;
+            lstPkg.Enabled = true;
+            PackProductUpdate();
 
 
 
@@ -321,6 +246,8 @@ namespace BrogrammersWorkshop
 
             PackagesDB.UpdatePackage(oldPck, updtPck);
             MessageBox.Show("Packages has been updated");
+
+            ResetPackage();
         }
 
         private void pkgdelete_Click(object sender, EventArgs e)
@@ -362,7 +289,7 @@ namespace BrogrammersWorkshop
 
 
 
-
+            ResetPackage();
 
 
         }
@@ -674,6 +601,113 @@ namespace BrogrammersWorkshop
                     listSuppPkg.Items.Add(supname.SupName);
 
                 }
+            }
+        }
+
+        private void pkgProductAdd_Click(object sender, EventArgs e)
+
+        {   if (lstPkg.SelectedIndex==-1)
+            {
+
+                MessageBox.Show("Please Select a Package to add the Product");
+
+            }
+
+
+            else
+            {
+                var productSupplierid = from item in productSupplierList
+                                        where item.ProdName == comboPrdPack.SelectedItem.ToString() && item.SupName == listSuppPkg.SelectedItem.ToString()
+                                        select new { item.ProductSupplierId };
+
+
+                Packages_Products_Suppliers pkgAddPro = new Packages_Products_Suppliers();
+
+                var id = productSupplierid.ToList();
+
+                foreach (var item in id)
+                {
+                    pkgAddPro.ProductSupplierId = item.ProductSupplierId;
+                }
+                pkgAddPro.PackageId = Convert.ToInt32(txtpkgID.Text);
+
+                Packages_Products_SuppliersDB.AddPackageProduct(pkgAddPro);
+
+                MessageBox.Show("Proucts Added");
+
+                PackProductUpdate();
+
+            }
+            
+
+              
+
+     
+
+
+        }
+
+        private void pkgCancel_Click(object sender, EventArgs e)
+        {
+            ResetPackage();
+        }
+
+        public void ResetPackage()
+        {
+            pkgADD.Enabled = true;
+            pkgEdit.Enabled = true;
+            pkgdelete.Enabled = true;
+            pkgSave.Enabled = false;
+            saveEdit.Visible = false;
+            pkgCancel.Enabled = false;
+            lstPkg.Enabled = true;
+            lstPkg.SelectedIndex = 0;
+
+            PackageListLoad();
+
+           
+        }
+
+        public void PackageListLoad()
+        {
+
+            foreach (var item in pack)
+            {
+
+                if (item.PkgName == lstPkg.SelectedItem.ToString())
+                {
+
+                    var pkgId = item.PackageId;
+                    txtPkgName.Text = item.PkgName;
+                    txtpkgID.Text = item.PackageId.ToString();
+                    txtDesc.Text = item.PkgDesc;
+                    txtBasePrice.Text = item.PkgBasePrice.ToString("c");
+                    txtCommission.Text = item.PkgAgencyCommission.ToString("c");
+
+                    if (item.PkgStartDate.HasValue)
+                    {
+                        txtPkgStrt.Text = item.PkgStartDate.Value.ToShortDateString();
+                    }
+                    else
+                    {
+                        txtPkgStrt.Text = "";
+                    }
+
+
+                    if (item.PkgEndDate.HasValue)
+                    {
+                        txtPkgEndDate.Text = item.PkgEndDate.Value.ToShortDateString();
+                    }
+                    else
+                    {
+                        txtPkgEndDate.Text = "";
+                    }
+
+                }
+
+
+
+
             }
         }
     }

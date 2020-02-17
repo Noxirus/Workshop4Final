@@ -79,6 +79,25 @@ namespace BrogrammersWorkshop
             return pkgProdSup;
         }// Get Packages and suppliers method completed
 
+        public static void  AddPackageProduct(Packages_Products_Suppliers pkgPrdSup)
+        {
+            int pkgID= -1;
+            using (SqlConnection connection = TravelExpertsDB.GetConnection())
+            {
+                string insertStatement =
+                     "INSERT INTO Packages_Products_Suppliers(PackageId, ProductSupplierId) " +
+                     "VALUES(@PackageId, @ProductSupplierId)";
+                using (SqlCommand cmd = new SqlCommand(insertStatement, connection))
+                {
+                    cmd.Parameters.AddWithValue("@PackageId", pkgPrdSup.PackageId);
+                    cmd.Parameters.AddWithValue("@ProductSupplierId", pkgPrdSup.ProductSupplierId);
+                    connection.Open();
+                    cmd.ExecuteScalar(); // fixes problem of retrieving ID
+                }
+            }
+            
+        }
+
 
 
     }
