@@ -676,13 +676,53 @@ namespace BrogrammersWorkshop
 
         }
 
-
+        // Deleting Product From Packages
         private void pkgProductDelete_Click(object sender, EventArgs e)
         {
-            
-            MessageBox.Show("Proucts Deleted");
+      
 
-            PackProductUpdate();
+            try
+            {
+                var pkgProductName = gridprdpkg.CurrentRow.Cells[0].Value.ToString();
+                var pkgSupplierName = gridprdpkg.CurrentRow.Cells[1].Value.ToString();
+
+
+                var pkgProductSupplierId = from item in productSupplierList
+                                           where item.ProdName == pkgProductName && item.SupName == pkgSupplierName
+                                           select new { item.ProductSupplierId };
+
+                Packages_Products_Suppliers pkgDeletePro = new Packages_Products_Suppliers();
+
+                var id = pkgProductSupplierId.ToList();
+
+                foreach (var item in id)
+                {
+                    pkgDeletePro.ProductSupplierId = item.ProductSupplierId;
+                }
+
+                pkgDeletePro.PackageId = Convert.ToInt32(txtpkgID.Text);
+
+                Packages_Products_SuppliersDB.DeletePackageProSupplier(pkgDeletePro);
+
+                MessageBox.Show("Proucts Deleted");
+
+                PackProductUpdate();
+            }
+
+            catch
+
+            {
+                MessageBox.Show("Please Select an item to Delete");
+            }
+
+               
+               
+          
+              
+
+              //  PackProductUpdate();
+
+
         }
 
 
