@@ -113,7 +113,7 @@ namespace BrogrammersWorkshop
             gridprdpkg.Columns[1].HeaderText = "Supplier Name";
 
         }
-
+        // Adding Packages  
         public void pkgADD_Click(object sender, EventArgs e)
         {
 
@@ -141,7 +141,7 @@ namespace BrogrammersWorkshop
             pkgProductAdd.Enabled = false;
             pkgProductDelete.Enabled = false; 
         }
-
+        // saving Added Packges **NEED VALIDATION OF DATA
         private void pkgSave_Click(object sender, EventArgs e)
         {
             DateTime? StartDate = string.IsNullOrWhiteSpace(txtPkgStrt.Text)
@@ -183,7 +183,7 @@ namespace BrogrammersWorkshop
 
 
         }
-
+        // EDIT Packages 
         private void pkgEdit_Click(object sender, EventArgs e)
         {
             txtPkgName.ReadOnly = false;
@@ -205,12 +205,11 @@ namespace BrogrammersWorkshop
             pkgProductDelete.Enabled = false;
 
         }
-
+        // Save Edit Packages ** Need Validation of Data
         private void saveEdit_Click(object sender, EventArgs e)
 
 
         {
-
 
             Packages oldPck = new Packages();
             foreach (var item in pack)
@@ -253,7 +252,7 @@ namespace BrogrammersWorkshop
 
             ResetPackage();
         }
-
+        // Deleting Packages from Package ** Need Validation of Data
         private void pkgdelete_Click(object sender, EventArgs e)
         {
             Packages pkgDel = new Packages();
@@ -281,8 +280,8 @@ namespace BrogrammersWorkshop
                 }
             }
 
-            var productSupplierid = from item in productSupplierList
-                                    where item.ProdName == comboPrdPack.SelectedItem.ToString() && item.SupName == listSuppPkg.SelectedItem.ToString()
+            var productSupplierid = from item in Products_SuppliersDB.GetProductsSuppliers()
+                                    where item.PackageId == Convert.ToInt32(txtpkgID.Text)
                                     select new { item.ProductSupplierId };
 
 
@@ -303,6 +302,9 @@ namespace BrogrammersWorkshop
             PackagesDB.DeletePackage(pkgDel);
             lstPkg.Items.Clear();
             MessageBox.Show("Packages has been Deleted");
+
+
+
             List<Packages> packupdatedel = PackagesDB.GetPackages();
             foreach (var pkg in packupdatedel)
             {
@@ -325,7 +327,7 @@ namespace BrogrammersWorkshop
         {
            
         }
-
+        // Adding Product to Product list 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
             btnAddSaveProd.Visible = true;
@@ -336,7 +338,7 @@ namespace BrogrammersWorkshop
             txtProductName.Focus();
 
         }
-
+        // adding Supplier in Supplier data table 
         private void btnAddSupplier_Click(object sender, EventArgs e)
         {
             
@@ -347,7 +349,7 @@ namespace BrogrammersWorkshop
             txtSupplier.Focus();
 
         }
-
+        // Adding Product to Product list ** Need Validation of Data
         private void btnAddSaveProd_Click(object sender, EventArgs e)
         {
             Products prodAdd = new Products();
@@ -361,7 +363,7 @@ namespace BrogrammersWorkshop
             
 
         }
-
+        // Adding Supplier to supplier table  ** Need Validation of Data
         private void btnSaveAddSupp_Click(object sender, EventArgs e)
         {
             Suppliers suppAdd = new Suppliers();
@@ -437,13 +439,13 @@ namespace BrogrammersWorkshop
         }
 
 
-
+        // Editing Products in products Table
 
         private void btnResetProduct_Click(object sender, EventArgs e)
         {
             ResetProductList();
         }
-
+        // Editing Products in Products table  ** Need Validation of Data
         private void btnEditProducts_Click(object sender, EventArgs e)
         {   
             if (lstProducts.SelectedItem == null)
@@ -468,7 +470,7 @@ namespace BrogrammersWorkshop
             }
            
         }
-
+        //  Editing Supplier in Supplier  Table ** Need Validation of Data
         private void btnEditSupplier_Click(object sender, EventArgs e)
         {
             if (lstSupplier.SelectedItem == null)
@@ -559,6 +561,8 @@ namespace BrogrammersWorkshop
 
             }
         }
+
+
         public void updateSupplierName(string supplierName,string updatedsupplierName)
         {
             foreach (var item in supp)
@@ -585,6 +589,8 @@ namespace BrogrammersWorkshop
             }
         }
 
+        // Editing Product_supplier table 
+
         private void btnEditAddProductSupplier_Click(object sender, EventArgs e)
         {
             try
@@ -601,7 +607,7 @@ namespace BrogrammersWorkshop
             }
             
         }
-
+        // Editing Product_supplier table ** Need Validation of Data
         private void btnAddPrdSaveEdit_Click(object sender, EventArgs e)
         {
             updateProductname(gridProductSuppliers.CurrentRow.Cells[2].Value.ToString(), txtPrdSupPrdName.Text);
