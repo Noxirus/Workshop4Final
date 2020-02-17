@@ -78,13 +78,13 @@ namespace BrogrammersWorkshop
             using (SqlConnection connection = TravelExpertsDB.GetConnection())
             {
                 string insertStatement =
-                    "INSERT INTO Products_Suppliers(ProductId, ProductSupplierId) " +
+                    "INSERT INTO Products_Suppliers(ProductId, SupplierId) " +
                     "OUTPUT inserted.ProductSupplierId  " +
-                    "VALUES(@ProductId, @ProductSupplierId)";
+                    "VALUES(@ProductId, @SupplierId)";
                 using (SqlCommand cmd = new SqlCommand(insertStatement, connection))
                 {
                     cmd.Parameters.AddWithValue("@ProductId", pkg.ProductId);
-                    cmd.Parameters.AddWithValue("@ProductSupplierId", pkg.ProductSupplierId);
+                    cmd.Parameters.AddWithValue("@SupplierId", pkg.SupplierId);
                    
                     connection.Open();
                     //cmd.ExecuteNonQuery(); // INSERT statement
@@ -98,8 +98,28 @@ namespace BrogrammersWorkshop
             }
 
             return ProductSupplierId;
+        }
+        public static bool DeleteProductsSuppliers(Products_Suppliers prodsup)
+        {
+            int count = 0; // how many rows deleted
+            using (SqlConnection connection = TravelExpertsDB.GetConnection())
+            {
+                string deleteStatement =
+                    "DELETE FROM Products_Suppliers " +
+                    "WHERE ProductSupplierId = @ProductSupplierId " + // to identify record
+                    "AND ProductId = @ProductId " + // the remaining conditions - for optimistic concurrency
+                    "AND SupplierId = @SupplierId";
 
-
+                using (SqlCommand cmd = new SqlCommand(deleteStatement, connection))
+                {
+                    cmd.Parameters.AddWithValue("@ProductSupplierId", prodsup.ProductSupplierId);
+                    cmd.Parameters.AddWithValue("@ProductId", prodsup.ProductId);
+                    cmd.Parameters.AddWithValue("@SupplierId", prodsup.SupplierId);
+                    connection.Open();
+                    count = cmd.ExecuteNonQuery(); // DELETE statement return # affected rows
+                }
+            }
+            return (count > 0);
         }
     }
 }
