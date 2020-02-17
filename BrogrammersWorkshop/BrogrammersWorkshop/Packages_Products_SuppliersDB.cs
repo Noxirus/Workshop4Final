@@ -81,7 +81,7 @@ namespace BrogrammersWorkshop
 
         public static void  AddPackageProduct(Packages_Products_Suppliers pkgPrdSup)
         {
-            int pkgID= -1;
+            
             using (SqlConnection connection = TravelExpertsDB.GetConnection())
             {
                 string insertStatement =
@@ -96,6 +96,25 @@ namespace BrogrammersWorkshop
                 }
             }
             
+        }
+
+        public static bool DeletePackagePro(Packages_Products_Suppliers pkg)
+        {
+            int count = 0; // how many rows deleted
+            using (SqlConnection connection = TravelExpertsDB.GetConnection())
+            {
+                string deleteStatement =
+                    "DELETE FROM Packages_Products_Suppliers " +
+                    "WHERE PackageId = @PackageId "; 
+
+                using (SqlCommand cmd = new SqlCommand(deleteStatement, connection))
+                {
+                    cmd.Parameters.AddWithValue("@PackageId", pkg.PackageId);
+                    connection.Open();
+                    count = cmd.ExecuteNonQuery(); // DELETE statement return # affected rows
+                }
+            }
+            return (count > 0);
         }
 
 

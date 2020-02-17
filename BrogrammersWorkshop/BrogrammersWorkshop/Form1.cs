@@ -138,6 +138,8 @@ namespace BrogrammersWorkshop
             gridprdpkg.Rows.Clear();
             lstPkg.Enabled=false;
             pkgADD.Enabled = false;
+            pkgProductAdd.Enabled = false;
+            pkgProductDelete.Enabled = false; 
         }
 
         private void pkgSave_Click(object sender, EventArgs e)
@@ -199,6 +201,8 @@ namespace BrogrammersWorkshop
             pkgSave.Enabled = false;
             pkgCancel.Enabled = true;
             saveEdit.Visible = true;
+            pkgProductAdd.Enabled = false;
+            pkgProductDelete.Enabled = false;
 
         }
 
@@ -276,7 +280,25 @@ namespace BrogrammersWorkshop
 
                 }
             }
-         
+
+            var productSupplierid = from item in productSupplierList
+                                    where item.ProdName == comboPrdPack.SelectedItem.ToString() && item.SupName == listSuppPkg.SelectedItem.ToString()
+                                    select new { item.ProductSupplierId };
+
+
+            Packages_Products_Suppliers pkgDelPro = new Packages_Products_Suppliers();
+
+            var id = productSupplierid.ToList();
+
+            foreach (var item in id)
+            {
+                pkgDelPro.ProductSupplierId = item.ProductSupplierId;
+            }
+            pkgDelPro.PackageId = Convert.ToInt32(txtpkgID.Text);
+
+            Packages_Products_SuppliersDB.DeletePackagePro(pkgDelPro);
+
+
 
             PackagesDB.DeletePackage(pkgDel);
             lstPkg.Items.Clear();
@@ -638,14 +660,28 @@ namespace BrogrammersWorkshop
                 PackProductUpdate();
 
             }
-            
 
-              
+          
 
-     
+
+
+
 
 
         }
+
+
+        private void pkgProductDelete_Click(object sender, EventArgs e)
+        {
+            
+            MessageBox.Show("Proucts Deleted");
+
+            PackProductUpdate();
+        }
+
+
+       
+
 
         private void pkgCancel_Click(object sender, EventArgs e)
         {
@@ -662,6 +698,8 @@ namespace BrogrammersWorkshop
             pkgCancel.Enabled = false;
             lstPkg.Enabled = true;
             lstPkg.SelectedIndex = 0;
+            pkgProductAdd.Enabled = true;
+            pkgProductDelete.Enabled = true;
 
             PackageListLoad();
 
@@ -710,5 +748,7 @@ namespace BrogrammersWorkshop
 
             }
         }
+
+        
     }
 }
