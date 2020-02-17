@@ -54,7 +54,7 @@ namespace BrogrammersWorkshop
             {
                 supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
             }
-
+            ResetPrdSupplierPage();
 
             var distinctPrd = productSupplierList.Select(o => o.ProdName).Distinct().ToList();
             comboPrdPack.DataSource = distinctPrd;
@@ -513,31 +513,47 @@ namespace BrogrammersWorkshop
 
         private void saveProdSup_Click(object sender, EventArgs e)
         {
-            Products_Suppliers addPrdSupp = new Products_Suppliers();
+            ResetPrdSupplierPage();
 
-            foreach (var item in prod)
-            {
-                
+            //try
+            // {
 
-                if (comboProduct.SelectedItem.ToString()==ProductsDB.GetProduct(item).ProdName )
-                {
-                    addPrdSupp.ProductId = item;
-                }
 
-            }
+            // }
 
-            foreach (var item in supp)
-            {
-                
+            // catch
+            // {
+            //     MessageBox.Show("Same Product Supplier Already Exist");
+            // }
+            //Products_Suppliers addPrdSupp = new Products_Suppliers();
 
-                if (comboSupplier.SelectedItem.ToString() == SuppliersDB.GetSupplier(item).SupName)
-                {
-                    addPrdSupp.SupplierId = item;
-                }
+            //foreach (var item in prod)
+            //{
 
-            }
 
-        
+            //    if (comboProduct.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
+            //    {
+            //        addPrdSupp.ProductId = item;
+            //    }
+
+            //}
+
+            //foreach (var item in supp)
+            //{
+
+
+            //    if (comboSupplier.SelectedItem.ToString() == SuppliersDB.GetSupplier(item).SupName)
+            //    {
+            //        addPrdSupp.SupplierId = item;
+            //    }
+
+            //}
+
+            //Products_SuppliersDB.AddProdSupplier(addPrdSupp);
+            //MessageBox.Show("Product Supplier Added");
+
+
+
         }
         public void updateProductname(string prdName, string updatedprdName)
         {
@@ -595,21 +611,41 @@ namespace BrogrammersWorkshop
         {
             try
             {
+               
+
                 var supplierproductID = gridProductSuppliers.CurrentRow.Cells[1].Value.ToString();
                 txtPrdSupPrdName.Text=gridProductSuppliers.CurrentRow.Cells[2].Value.ToString();
                 txtAddSupSupName.Text = gridProductSuppliers.CurrentRow.Cells[3].Value.ToString();
-                
+
+                addProdSupp.Visible = true;
+                btnEditAddProductSupplier.Enabled = true;
+                btnDeleteProdSupplier.Enabled = false;
+                lblProductName.Visible = true;
+                lblProductSupplierName.Visible = true;
+                txtAddSupSupName.Visible = true;
+                txtPrdSupPrdName.Visible = true;
+                saveProdSup.Visible = false;
+                btnAddPrdSaveEdit.Visible = true;
+                comboProduct.Visible = false;
+                comboSupplier.Visible = false;
+                resetPrdSup.Enabled = true;
+
+
+
             }
 
             catch
             {
                 MessageBox.Show("Please Select an item ");
+
+                ResetPrdSupplierPage();
             }
             
         }
         // Editing Product_supplier table ** Need Validation of Data
         private void btnAddPrdSaveEdit_Click(object sender, EventArgs e)
         {
+      
             updateProductname(gridProductSuppliers.CurrentRow.Cells[2].Value.ToString(), txtPrdSupPrdName.Text);
             updateSupplierName(gridProductSuppliers.CurrentRow.Cells[3].Value.ToString(), txtAddSupSupName.Text);
             MessageBox.Show("Data Updated");
@@ -617,6 +653,7 @@ namespace BrogrammersWorkshop
             gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
             ResetProductList();
             ResetSupplierList();
+            ResetPrdSupplierPage();
         }
 
         private void comboPrdPack_SelectedIndexChanged(object sender, EventArgs e)
@@ -634,38 +671,51 @@ namespace BrogrammersWorkshop
 
         private void pkgProductAdd_Click(object sender, EventArgs e)
 
-        {   if (lstPkg.SelectedIndex==-1)
+        {
+            PackProductUpdate();
+            try
             {
-
-                MessageBox.Show("Please Select a Package to add the Product");
-
-            }
-
-
-            else
-            {
-                var productSupplierid = from item in productSupplierList
-                                        where item.ProdName == comboPrdPack.SelectedItem.ToString() && item.SupName == listSuppPkg.SelectedItem.ToString()
-                                        select new { item.ProductSupplierId };
-
-
-                Packages_Products_Suppliers pkgAddPro = new Packages_Products_Suppliers();
-
-                var id = productSupplierid.ToList();
-
-                foreach (var item in id)
+                if (lstPkg.SelectedIndex == -1)
                 {
-                    pkgAddPro.ProductSupplierId = item.ProductSupplierId;
+
+                    MessageBox.Show("Please Select a Package to add the Product");
+
                 }
-                pkgAddPro.PackageId = Convert.ToInt32(txtpkgID.Text);
 
-                Packages_Products_SuppliersDB.AddPackageProduct(pkgAddPro);
 
-                MessageBox.Show("Proucts Added");
+                else
+                {
+                    var productSupplierid = from item in productSupplierList
+                                            where item.ProdName == comboPrdPack.SelectedItem.ToString() && item.SupName == listSuppPkg.SelectedItem.ToString()
+                                            select new { item.ProductSupplierId };
 
-                PackProductUpdate();
 
+                    Packages_Products_Suppliers pkgAddPro = new Packages_Products_Suppliers();
+
+                    var id = productSupplierid.ToList();
+
+                    foreach (var item in id)
+                    {
+                        pkgAddPro.ProductSupplierId = item.ProductSupplierId;
+                    }
+                    pkgAddPro.PackageId = Convert.ToInt32(txtpkgID.Text);
+
+                    Packages_Products_SuppliersDB.AddPackageProduct(pkgAddPro);
+
+                    MessageBox.Show("Proucts Added");
+
+                    PackProductUpdate();
+
+                }
             }
+            
+            catch
+            {
+
+                MessageBox.Show("Product Already in the Packages");
+            }
+            
+            
 
           
 
@@ -795,6 +845,48 @@ namespace BrogrammersWorkshop
             }
         }
 
-        
+        private void resetPrdSup_Click(object sender, EventArgs e)
+        {
+
+
+            ResetPrdSupplierPage();
+
+            
+        }
+
+        public void  ResetPrdSupplierPage()
+        {
+            addProdSupp.Visible = true;
+            btnEditAddProductSupplier.Visible = true;
+            btnDeleteProdSupplier.Visible = true;
+
+            btnEditAddProductSupplier.Enabled = true;
+            btnDeleteProdSupplier.Enabled = true;
+            lblProductName.Visible = false;
+            lblProductSupplierName.Visible = false;
+            txtAddSupSupName.Visible = false;
+            txtPrdSupPrdName.Visible = false;
+            saveProdSup.Visible = false;
+            btnAddPrdSaveEdit.Visible = false;
+            comboProduct.Visible = false;
+            comboSupplier.Visible = false;
+            resetPrdSup.Enabled = false;
+        }
+
+        private void addProdSupp_Click(object sender, EventArgs e)
+        {
+            addProdSupp.Visible = true;
+            btnEditAddProductSupplier.Enabled = false;
+            btnDeleteProdSupplier.Enabled = false;
+            lblProductName.Visible = true;
+            lblProductSupplierName.Visible = true;
+            txtAddSupSupName.Visible = false;
+            txtPrdSupPrdName.Visible = false;
+            saveProdSup.Visible = true;
+            btnAddPrdSaveEdit.Visible = false;
+            comboProduct.Visible = true;
+            comboSupplier.Visible = true;
+            resetPrdSup.Enabled = true;
+        }
     }
 }

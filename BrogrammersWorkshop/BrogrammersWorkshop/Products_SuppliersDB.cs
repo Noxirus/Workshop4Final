@@ -71,5 +71,35 @@ namespace BrogrammersWorkshop
             }
             return prodSup;
         }// Get Packages and suppliers method completed
+
+        public static int  AddProdSupplier(Products_Suppliers pkg)
+        {
+            int ProductSupplierId = -1;
+            using (SqlConnection connection = TravelExpertsDB.GetConnection())
+            {
+                string insertStatement =
+                    "INSERT INTO Products_Suppliers(ProductId, ProductSupplierId) " +
+                    "OUTPUT inserted.ProductSupplierId  " +
+                    "VALUES(@ProductId, @ProductSupplierId)";
+                using (SqlCommand cmd = new SqlCommand(insertStatement, connection))
+                {
+                    cmd.Parameters.AddWithValue("@ProductId", pkg.ProductId);
+                    cmd.Parameters.AddWithValue("@ProductSupplierId", pkg.ProductSupplierId);
+                   
+                    connection.Open();
+                    //cmd.ExecuteNonQuery(); // INSERT statement
+                    ProductSupplierId = (int)cmd.ExecuteScalar(); // fixes problem of retrieving ID
+                    //Thread.Sleep(10000);
+                    // retrieve generated customerID
+                    //string secondQuery = "SELECT IDENT_CURRENT('Customers')"; // most recent value  generated for identity column
+                    //SqlCommand secondCmd = new SqlCommand(secondQuery, connection);
+                    //customerID = Convert.ToInt32(secondCmd.ExecuteScalar());
+                }
+            }
+
+            return ProductSupplierId;
+
+
+        }
     }
 }

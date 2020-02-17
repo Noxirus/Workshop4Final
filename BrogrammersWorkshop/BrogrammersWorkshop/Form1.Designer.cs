@@ -88,6 +88,8 @@
             this.lstSupplier = new System.Windows.Forms.ListBox();
             this.lstProducts = new System.Windows.Forms.ListBox();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.lblProductSupplierName = new MetroFramework.Controls.MetroLabel();
+            this.lblProductName = new MetroFramework.Controls.MetroLabel();
             this.btnAddPrdSaveEdit = new MetroFramework.Controls.MetroButton();
             this.txtAddSupSupName = new MetroFramework.Controls.MetroTextBox();
             this.txtPrdSupPrdName = new MetroFramework.Controls.MetroTextBox();
@@ -99,6 +101,7 @@
             this.addProdSupp = new MetroFramework.Controls.MetroButton();
             this.gridProductSuppliers = new MetroFramework.Controls.MetroGrid();
             this.gridPkgPrd = new MetroFramework.Controls.MetroGrid();
+            this.btnDeleteProdSupplier = new MetroFramework.Controls.MetroButton();
             this.Packages.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridprdpkg)).BeginInit();
@@ -115,7 +118,7 @@
             this.Packages.Controls.Add(this.metroTabPage2);
             this.Packages.Location = new System.Drawing.Point(35, 72);
             this.Packages.Name = "Packages";
-            this.Packages.SelectedIndex = 0;
+            this.Packages.SelectedIndex = 2;
             this.Packages.Size = new System.Drawing.Size(950, 670);
             this.Packages.TabIndex = 1;
             this.Packages.UseSelectable = true;
@@ -155,7 +158,7 @@
             this.metroTabPage1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.metroTabPage1.HorizontalScrollbarBarColor = true;
             this.metroTabPage1.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage1.HorizontalScrollbarSize = 39;
+            this.metroTabPage1.HorizontalScrollbarSize = 45;
             this.metroTabPage1.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage1.Name = "metroTabPage1";
             this.metroTabPage1.Padding = new System.Windows.Forms.Padding(5);
@@ -902,6 +905,9 @@
             // 
             // metroTabPage2
             // 
+            this.metroTabPage2.Controls.Add(this.btnDeleteProdSupplier);
+            this.metroTabPage2.Controls.Add(this.lblProductSupplierName);
+            this.metroTabPage2.Controls.Add(this.lblProductName);
             this.metroTabPage2.Controls.Add(this.btnAddPrdSaveEdit);
             this.metroTabPage2.Controls.Add(this.txtAddSupSupName);
             this.metroTabPage2.Controls.Add(this.txtPrdSupPrdName);
@@ -926,11 +932,31 @@
             this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage2.VerticalScrollbarSize = 10;
             // 
+            // lblProductSupplierName
+            // 
+            this.lblProductSupplierName.AutoSize = true;
+            this.lblProductSupplierName.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblProductSupplierName.Location = new System.Drawing.Point(53, 126);
+            this.lblProductSupplierName.Name = "lblProductSupplierName";
+            this.lblProductSupplierName.Size = new System.Drawing.Size(120, 20);
+            this.lblProductSupplierName.TabIndex = 13;
+            this.lblProductSupplierName.Text = "Supplier Name :";
+            // 
+            // lblProductName
+            // 
+            this.lblProductName.AutoSize = true;
+            this.lblProductName.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblProductName.Location = new System.Drawing.Point(55, 73);
+            this.lblProductName.Name = "lblProductName";
+            this.lblProductName.Size = new System.Drawing.Size(118, 20);
+            this.lblProductName.TabIndex = 12;
+            this.lblProductName.Text = "Product Name :";
+            // 
             // btnAddPrdSaveEdit
             // 
-            this.btnAddPrdSaveEdit.Location = new System.Drawing.Point(616, 97);
+            this.btnAddPrdSaveEdit.Location = new System.Drawing.Point(433, 116);
             this.btnAddPrdSaveEdit.Name = "btnAddPrdSaveEdit";
-            this.btnAddPrdSaveEdit.Size = new System.Drawing.Size(114, 30);
+            this.btnAddPrdSaveEdit.Size = new System.Drawing.Size(144, 30);
             this.btnAddPrdSaveEdit.TabIndex = 11;
             this.btnAddPrdSaveEdit.Text = "Save EDIT";
             this.btnAddPrdSaveEdit.UseSelectable = true;
@@ -951,7 +977,7 @@
             this.txtAddSupSupName.CustomButton.UseSelectable = true;
             this.txtAddSupSupName.CustomButton.Visible = false;
             this.txtAddSupSupName.Lines = new string[0];
-            this.txtAddSupSupName.Location = new System.Drawing.Point(400, 97);
+            this.txtAddSupSupName.Location = new System.Drawing.Point(199, 75);
             this.txtAddSupSupName.MaxLength = 32767;
             this.txtAddSupSupName.Name = "txtAddSupSupName";
             this.txtAddSupSupName.PasswordChar = '\0';
@@ -972,7 +998,7 @@
             // 
             // 
             this.txtPrdSupPrdName.CustomButton.Image = null;
-            this.txtPrdSupPrdName.CustomButton.Location = new System.Drawing.Point(155, 2);
+            this.txtPrdSupPrdName.CustomButton.Location = new System.Drawing.Point(169, 2);
             this.txtPrdSupPrdName.CustomButton.Name = "";
             this.txtPrdSupPrdName.CustomButton.Size = new System.Drawing.Size(23, 23);
             this.txtPrdSupPrdName.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -981,7 +1007,7 @@
             this.txtPrdSupPrdName.CustomButton.UseSelectable = true;
             this.txtPrdSupPrdName.CustomButton.Visible = false;
             this.txtPrdSupPrdName.Lines = new string[0];
-            this.txtPrdSupPrdName.Location = new System.Drawing.Point(204, 97);
+            this.txtPrdSupPrdName.Location = new System.Drawing.Point(199, 118);
             this.txtPrdSupPrdName.MaxLength = 32767;
             this.txtPrdSupPrdName.Name = "txtPrdSupPrdName";
             this.txtPrdSupPrdName.PasswordChar = '\0';
@@ -990,7 +1016,7 @@
             this.txtPrdSupPrdName.SelectionLength = 0;
             this.txtPrdSupPrdName.SelectionStart = 0;
             this.txtPrdSupPrdName.ShortcutsEnabled = true;
-            this.txtPrdSupPrdName.Size = new System.Drawing.Size(181, 28);
+            this.txtPrdSupPrdName.Size = new System.Drawing.Size(195, 28);
             this.txtPrdSupPrdName.TabIndex = 9;
             this.txtPrdSupPrdName.UseSelectable = true;
             this.txtPrdSupPrdName.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
@@ -998,9 +1024,9 @@
             // 
             // btnEditAddProductSupplier
             // 
-            this.btnEditAddProductSupplier.Location = new System.Drawing.Point(41, 87);
+            this.btnEditAddProductSupplier.Location = new System.Drawing.Point(234, 25);
             this.btnEditAddProductSupplier.Name = "btnEditAddProductSupplier";
-            this.btnEditAddProductSupplier.Size = new System.Drawing.Size(133, 50);
+            this.btnEditAddProductSupplier.Size = new System.Drawing.Size(146, 30);
             this.btnEditAddProductSupplier.TabIndex = 8;
             this.btnEditAddProductSupplier.Text = "Edit Product Supplier";
             this.btnEditAddProductSupplier.UseSelectable = true;
@@ -1008,18 +1034,19 @@
             // 
             // resetPrdSup
             // 
-            this.resetPrdSup.Location = new System.Drawing.Point(757, 28);
+            this.resetPrdSup.Location = new System.Drawing.Point(611, 25);
             this.resetPrdSup.Name = "resetPrdSup";
-            this.resetPrdSup.Size = new System.Drawing.Size(109, 30);
+            this.resetPrdSup.Size = new System.Drawing.Size(144, 30);
             this.resetPrdSup.TabIndex = 7;
             this.resetPrdSup.Text = "RESET";
             this.resetPrdSup.UseSelectable = true;
+            this.resetPrdSup.Click += new System.EventHandler(this.resetPrdSup_Click);
             // 
             // saveProdSup
             // 
-            this.saveProdSup.Location = new System.Drawing.Point(616, 28);
+            this.saveProdSup.Location = new System.Drawing.Point(433, 73);
             this.saveProdSup.Name = "saveProdSup";
-            this.saveProdSup.Size = new System.Drawing.Size(114, 30);
+            this.saveProdSup.Size = new System.Drawing.Size(144, 30);
             this.saveProdSup.TabIndex = 6;
             this.saveProdSup.Text = "Save ADD";
             this.saveProdSup.UseSelectable = true;
@@ -1029,7 +1056,7 @@
             // 
             this.comboSupplier.FormattingEnabled = true;
             this.comboSupplier.ItemHeight = 24;
-            this.comboSupplier.Location = new System.Drawing.Point(400, 28);
+            this.comboSupplier.Location = new System.Drawing.Point(199, 118);
             this.comboSupplier.Name = "comboSupplier";
             this.comboSupplier.Size = new System.Drawing.Size(195, 30);
             this.comboSupplier.TabIndex = 5;
@@ -1039,7 +1066,7 @@
             // 
             this.comboProduct.FormattingEnabled = true;
             this.comboProduct.ItemHeight = 24;
-            this.comboProduct.Location = new System.Drawing.Point(190, 28);
+            this.comboProduct.Location = new System.Drawing.Point(199, 73);
             this.comboProduct.Name = "comboProduct";
             this.comboProduct.Size = new System.Drawing.Size(195, 30);
             this.comboProduct.TabIndex = 4;
@@ -1047,12 +1074,13 @@
             // 
             // addProdSupp
             // 
-            this.addProdSupp.Location = new System.Drawing.Point(41, 18);
+            this.addProdSupp.Location = new System.Drawing.Point(41, 25);
             this.addProdSupp.Name = "addProdSupp";
-            this.addProdSupp.Size = new System.Drawing.Size(133, 50);
+            this.addProdSupp.Size = new System.Drawing.Size(142, 33);
             this.addProdSupp.TabIndex = 3;
             this.addProdSupp.Text = "Add Product Supplier";
             this.addProdSupp.UseSelectable = true;
+            this.addProdSupp.Click += new System.EventHandler(this.addProdSupp_Click);
             // 
             // gridProductSuppliers
             // 
@@ -1087,6 +1115,7 @@
             this.gridProductSuppliers.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.gridProductSuppliers.Location = new System.Drawing.Point(41, 163);
             this.gridProductSuppliers.Name = "gridProductSuppliers";
+            this.gridProductSuppliers.ReadOnly = true;
             this.gridProductSuppliers.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
@@ -1148,6 +1177,15 @@
             this.gridPkgPrd.Size = new System.Drawing.Size(581, 137);
             this.gridPkgPrd.TabIndex = 18;
             // 
+            // btnDeleteProdSupplier
+            // 
+            this.btnDeleteProdSupplier.Location = new System.Drawing.Point(431, 25);
+            this.btnDeleteProdSupplier.Name = "btnDeleteProdSupplier";
+            this.btnDeleteProdSupplier.Size = new System.Drawing.Size(146, 30);
+            this.btnDeleteProdSupplier.TabIndex = 14;
+            this.btnDeleteProdSupplier.Text = "Delete Product Supplier";
+            this.btnDeleteProdSupplier.UseSelectable = true;
+            // 
             // TravelExpert
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 15F);
@@ -1171,6 +1209,7 @@
             this.Save.ResumeLayout(false);
             this.Save.PerformLayout();
             this.metroTabPage2.ResumeLayout(false);
+            this.metroTabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridProductSuppliers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridPkgPrd)).EndInit();
             this.ResumeLayout(false);
@@ -1239,5 +1278,8 @@
         private MetroFramework.Controls.MetroTextBox txtAddSupSupName;
         private MetroFramework.Controls.MetroTextBox txtPrdSupPrdName;
         private MetroFramework.Controls.MetroButton btnEditAddProductSupplier;
+        private MetroFramework.Controls.MetroLabel lblProductSupplierName;
+        private MetroFramework.Controls.MetroLabel lblProductName;
+        private MetroFramework.Controls.MetroButton btnDeleteProdSupplier;
     }
 }
