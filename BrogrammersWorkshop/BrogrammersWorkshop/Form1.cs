@@ -55,8 +55,29 @@ namespace BrogrammersWorkshop
                 supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
             }
 
+
+            var distinctPrd = productSupplierList.Select(o => o.ProdName).Distinct().ToList();
+            comboPrdPack.DataSource = distinctPrd;
             comboProduct.DataSource = product;
             comboSupplier.DataSource = supplier;
+
+            var lstsup = new List<string>();
+            foreach (var supname in productSupplierList)
+            { 
+                if (supname.ProdName== comboPrdPack.SelectedItem.ToString())
+                {
+                    listSuppPkg.Items.Add(supname.SupName);
+
+                }
+            }
+
+           
+
+
+            
+
+
+          
 
             gridProductSuppliers.Columns[1].HeaderText = "Product Supplier ID";
             gridProductSuppliers.Columns[2].HeaderText = "Product Name";
@@ -641,6 +662,19 @@ namespace BrogrammersWorkshop
             gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
             ResetProductList();
             ResetSupplierList();
+        }
+
+        private void comboPrdPack_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            listSuppPkg.Items.Clear();
+            foreach (var supname in productSupplierList)
+            {
+                if (supname.ProdName == comboPrdPack.SelectedItem.ToString())
+                {
+                    listSuppPkg.Items.Add(supname.SupName);
+
+                }
+            }
         }
     }
 }
