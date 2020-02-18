@@ -324,9 +324,10 @@ namespace BrogrammersWorkshop
         {
             Packages pkgDel = new Packages();
             Packages_Products_Suppliers pkgPrdDel = new Packages_Products_Suppliers();
+            List<Packages> pack = PackagesDB.GetPackages();
 
 
-       
+
 
 
 
