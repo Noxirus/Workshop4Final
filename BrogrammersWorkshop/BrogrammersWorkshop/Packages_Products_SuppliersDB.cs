@@ -139,6 +139,27 @@ namespace BrogrammersWorkshop
             return (count > 0);
         }
 
+        public static bool DeletePackageProSupplierByID(Packages_Products_Suppliers pkg)
+        {
+            int count = 0; // how many rows deleted
+            using (SqlConnection connection = TravelExpertsDB.GetConnection())
+            {
+                string deleteStatement =
+                    "DELETE FROM Packages_Products_Suppliers " +
+                    "WHERE ProductSupplierId = @ProductSupplierId ";
+                 
+
+                using (SqlCommand cmd = new SqlCommand(deleteStatement, connection))
+                {
+                  
+                    cmd.Parameters.AddWithValue("@ProductSupplierId", pkg.ProductSupplierId);
+                    connection.Open();
+                    count = cmd.ExecuteNonQuery(); // DELETE statement return # affected rows
+                }
+            }
+            return (count > 0);
+        }
+
 
 
     }

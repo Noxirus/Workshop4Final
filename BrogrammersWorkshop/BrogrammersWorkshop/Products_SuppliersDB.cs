@@ -106,15 +106,12 @@ namespace BrogrammersWorkshop
             {
                 string deleteStatement =
                     "DELETE FROM Products_Suppliers " +
-                    "WHERE ProductSupplierId = @ProductSupplierId " + // to identify record
-                    "AND ProductId = @ProductId " + // the remaining conditions - for optimistic concurrency
-                    "AND SupplierId = @SupplierId";
+                    "WHERE ProductSupplierId = @ProductSupplierId "; 
 
                 using (SqlCommand cmd = new SqlCommand(deleteStatement, connection))
                 {
                     cmd.Parameters.AddWithValue("@ProductSupplierId", prodsup.ProductSupplierId);
-                    cmd.Parameters.AddWithValue("@ProductId", prodsup.ProductId);
-                    cmd.Parameters.AddWithValue("@SupplierId", prodsup.SupplierId);
+                   
                     connection.Open();
                     count = cmd.ExecuteNonQuery(); // DELETE statement return # affected rows
                 }
