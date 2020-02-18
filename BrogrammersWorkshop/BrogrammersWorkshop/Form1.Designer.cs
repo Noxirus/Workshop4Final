@@ -114,11 +114,11 @@
             // Packages
             // 
             this.Packages.Controls.Add(this.metroTabPage1);
-            this.Packages.Controls.Add(this.Save);
             this.Packages.Controls.Add(this.metroTabPage2);
+            this.Packages.Controls.Add(this.Save);
             this.Packages.Location = new System.Drawing.Point(35, 72);
             this.Packages.Name = "Packages";
-            this.Packages.SelectedIndex = 2;
+            this.Packages.SelectedIndex = 1;
             this.Packages.Size = new System.Drawing.Size(950, 670);
             this.Packages.TabIndex = 1;
             this.Packages.UseSelectable = true;
@@ -158,7 +158,7 @@
             this.metroTabPage1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.metroTabPage1.HorizontalScrollbarBarColor = true;
             this.metroTabPage1.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage1.HorizontalScrollbarSize = 66;
+            this.metroTabPage1.HorizontalScrollbarSize = 70;
             this.metroTabPage1.Location = new System.Drawing.Point(4, 38);
             this.metroTabPage1.Name = "metroTabPage1";
             this.metroTabPage1.Padding = new System.Windows.Forms.Padding(5);
@@ -1097,8 +1097,10 @@
             this.gridProductSuppliers.AllowUserToAddRows = false;
             this.gridProductSuppliers.AllowUserToDeleteRows = false;
             this.gridProductSuppliers.AllowUserToResizeRows = false;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.AliceBlue;
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Gainsboro;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Blue;
             this.gridProductSuppliers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.gridProductSuppliers.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -1107,10 +1109,10 @@
             this.gridProductSuppliers.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Red;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.AliceBlue;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Red;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.gridProductSuppliers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.gridProductSuppliers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;

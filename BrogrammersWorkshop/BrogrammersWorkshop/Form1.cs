@@ -244,8 +244,11 @@ namespace BrogrammersWorkshop
 
 
         {
-
+            var pack = PackagesDB.GetPackages();
             Packages oldPck = new Packages();
+
+         
+
             foreach (var item in pack)
             {
                 if(item.PackageId == Convert.ToInt32(txtpkgID.Text))
