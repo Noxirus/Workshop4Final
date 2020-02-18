@@ -117,9 +117,11 @@
             this.Packages.Controls.Add(this.metroTabPage1);
             this.Packages.Controls.Add(this.metroTabPage2);
             this.Packages.Controls.Add(this.Save);
+            this.Packages.FontSize = MetroFramework.MetroTabControlSize.Small;
+            this.Packages.FontWeight = MetroFramework.MetroTabControlWeight.Bold;
             this.Packages.Location = new System.Drawing.Point(35, 72);
             this.Packages.Name = "Packages";
-            this.Packages.SelectedIndex = 0;
+            this.Packages.SelectedIndex = 2;
             this.Packages.Size = new System.Drawing.Size(950, 670);
             this.Packages.TabIndex = 1;
             this.Packages.UseCustomForeColor = true;
@@ -162,10 +164,10 @@
             this.metroTabPage1.HorizontalScrollbarBarColor = true;
             this.metroTabPage1.HorizontalScrollbarHighlightOnWheel = false;
             this.metroTabPage1.HorizontalScrollbarSize = 75;
-            this.metroTabPage1.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage1.Location = new System.Drawing.Point(4, 34);
             this.metroTabPage1.Name = "metroTabPage1";
             this.metroTabPage1.Padding = new System.Windows.Forms.Padding(5);
-            this.metroTabPage1.Size = new System.Drawing.Size(942, 628);
+            this.metroTabPage1.Size = new System.Drawing.Size(942, 632);
             this.metroTabPage1.TabIndex = 0;
             this.metroTabPage1.Text = "Packagaes ";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
@@ -442,9 +444,9 @@
             this.lblPkgProduct.FontWeight = MetroFramework.MetroLabelWeight.Bold;
             this.lblPkgProduct.Location = new System.Drawing.Point(553, 291);
             this.lblPkgProduct.Name = "lblPkgProduct";
-            this.lblPkgProduct.Size = new System.Drawing.Size(171, 25);
+            this.lblPkgProduct.Size = new System.Drawing.Size(202, 25);
             this.lblPkgProduct.TabIndex = 17;
-            this.lblPkgProduct.Text = "Package Products";
+            this.lblPkgProduct.Text = "PACKAGE PRODUCTS";
             // 
             // txtCommission
             // 
@@ -722,22 +724,22 @@
             this.lblPkgInf.AutoSize = true;
             this.lblPkgInf.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.lblPkgInf.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.lblPkgInf.Location = new System.Drawing.Point(525, 5);
+            this.lblPkgInf.Location = new System.Drawing.Point(499, 5);
             this.lblPkgInf.Name = "lblPkgInf";
-            this.lblPkgInf.Size = new System.Drawing.Size(199, 25);
+            this.lblPkgInf.Size = new System.Drawing.Size(235, 25);
             this.lblPkgInf.TabIndex = 4;
-            this.lblPkgInf.Text = "Package Information";
+            this.lblPkgInf.Text = "PACKAGE INFORMATION";
             // 
             // lblavalpkg
             // 
             this.lblavalpkg.AutoSize = true;
             this.lblavalpkg.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.lblavalpkg.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.lblavalpkg.Location = new System.Drawing.Point(24, 34);
+            this.lblavalpkg.Location = new System.Drawing.Point(10, 31);
             this.lblavalpkg.Name = "lblavalpkg";
-            this.lblavalpkg.Size = new System.Drawing.Size(179, 25);
+            this.lblavalpkg.Size = new System.Drawing.Size(211, 25);
             this.lblavalpkg.TabIndex = 3;
-            this.lblavalpkg.Text = "Available Packages";
+            this.lblavalpkg.Text = "AVAILABLE PACKAGES";
             // 
             // metroTabPage2
             // 
@@ -759,9 +761,9 @@
             this.metroTabPage2.HorizontalScrollbarBarColor = true;
             this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
             this.metroTabPage2.HorizontalScrollbarSize = 10;
-            this.metroTabPage2.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage2.Location = new System.Drawing.Point(4, 34);
             this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(942, 628);
+            this.metroTabPage2.Size = new System.Drawing.Size(942, 632);
             this.metroTabPage2.TabIndex = 1;
             this.metroTabPage2.Text = "Packages Product";
             this.metroTabPage2.VerticalScrollbarBarColor = true;
@@ -1005,9 +1007,9 @@
             this.Save.HorizontalScrollbarBarColor = true;
             this.Save.HorizontalScrollbarHighlightOnWheel = false;
             this.Save.HorizontalScrollbarSize = 10;
-            this.Save.Location = new System.Drawing.Point(4, 38);
+            this.Save.Location = new System.Drawing.Point(4, 34);
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(942, 628);
+            this.Save.Size = new System.Drawing.Size(942, 632);
             this.Save.TabIndex = 2;
             this.Save.Text = "Suppliers/Products";
             this.Save.VerticalScrollbarBarColor = true;
