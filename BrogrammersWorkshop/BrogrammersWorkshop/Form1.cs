@@ -332,7 +332,7 @@ namespace BrogrammersWorkshop
 
             foreach (var item in pack)
             {
-                if (item.PackageId == Convert.ToInt32(txtpkgID.Text))
+                if (item.PackageId == Convert.ToInt32(txtpkgID.Text)) // txt box is one number ahead of newly added items
                 {
 
                     pkgDel.PackageId = item.PackageId;
