@@ -4,6 +4,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using 
 
 namespace BrogrammersWorkshop
 {
@@ -244,20 +245,28 @@ namespace BrogrammersWorkshop
 
 
         {
+            if(Validation.IsPresent(txtPkgName, "Package Name") &&
+                Validation.IsPresent(txtPkgStrt, "Package Start Date") &&
+                Validation.IsPresent(txtPkgEndDate, "Package End Date") &&
+                Validation.IsPresent(txtBasePrice, "Base Price") &&
+                Validation.IsPresent(txtCommission, "Commission") &&
+                Validation.IsPresent(txtDesc, "Description") &&
 
-            DateTime dt;
-            bool validStart = DateTime.TryParseExact(txtPkgStrt.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
-            bool validEnd = DateTime.TryParseExact(txtPkgEndDate.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
-            if (validStart != true)
-            {
-                MessageBox.Show("Please Eneter start Date in format in MM/dd/YYYY");
-                return;
-            }
-            if (validEnd != true)
-            {
-                MessageBox.Show("Please Eneter End Date in format in MM/dd/YYYY");
-                return;
-            }
+
+                )
+            //DateTime dt;
+            //bool validStart = DateTime.TryParseExact(txtPkgStrt.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
+            //bool validEnd = DateTime.TryParseExact(txtPkgEndDate.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
+            //if (validStart != true)
+            //{
+            //    MessageBox.Show("Please Eneter start Date in format in MM/dd/YYYY");
+            //    return;
+            //}
+            //if (validEnd != true)
+            //{
+            //    MessageBox.Show("Please Eneter End Date in format in MM/dd/YYYY");
+            //    return;
+            //}
 
             var pack = PackagesDB.GetPackages();
             Packages oldPck = new Packages();
