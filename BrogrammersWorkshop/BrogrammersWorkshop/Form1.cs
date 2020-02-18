@@ -73,7 +73,7 @@ namespace BrogrammersWorkshop
             gridProductSuppliers.Columns[1].HeaderText = "Product Supplier ID";
             gridProductSuppliers.Columns[2].HeaderText = "Product Name";
             gridProductSuppliers.Columns[3].HeaderText = "Supplier Name";
-            gridProductSuppliers.Columns[1].Width = 180;
+            gridProductSuppliers.Columns[1].Width = 150;
             gridProductSuppliers.Columns[2].Width = 300;
             gridProductSuppliers.Columns[3].Width = 300;
             gridProductSuppliers.ClearSelection();
@@ -244,6 +244,21 @@ namespace BrogrammersWorkshop
 
 
         {
+
+            DateTime dt;
+            bool validStart = DateTime.TryParseExact(txtPkgStrt.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
+            bool validEnd = DateTime.TryParseExact(txtPkgEndDate.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
+            if (validStart != true)
+            {
+                MessageBox.Show("Please Eneter start Date in format in MM/dd/YYYY");
+                return;
+            }
+            if (validEnd != true)
+            {
+                MessageBox.Show("Please Eneter End Date in format in MM/dd/YYYY");
+                return;
+            }
+
             var pack = PackagesDB.GetPackages();
             Packages oldPck = new Packages();
 
@@ -1057,6 +1072,6 @@ namespace BrogrammersWorkshop
             }
         }
 
-     
+       
     }
 }
