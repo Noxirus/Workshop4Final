@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+
 
 namespace BrogrammersWorkshop
 {
@@ -13,25 +15,25 @@ namespace BrogrammersWorkshop
         {
             InitializeComponent();
         }
-        
+
         private List<Packages> pack = PackagesDB.GetPackages();
         private List<PackagesProductInfo> packProdSupp = Packages_Products_SuppliersDB.GetPackProductsSuppliers();
         private List<PackagesProductInfo> productSupplierList = Products_SuppliersDB.GetProductsSuppliers();
         private List<int> prod = ProductsDB.GetProductID();
         private List<int> supp = SuppliersDB.GetSupplierIDs();
         List<string> product = new List<string>();
-        List<string> supplier= new List<string>();
-
-           
+        List<string> supplier = new List<string>();
 
 
 
 
-    private void TravelExpert_Load(object sender, EventArgs e)
+
+
+        private void TravelExpert_Load(object sender, EventArgs e)
         {
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            
+
             foreach (var pkg in pack)
             {
 
@@ -51,7 +53,7 @@ namespace BrogrammersWorkshop
             {
                 supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
             }
-           
+
 
             var distinctPrd = productSupplierList.Select(o => o.ProdName).Distinct().ToList();
             comboPrdPack.DataSource = distinctPrd;
@@ -68,7 +70,7 @@ namespace BrogrammersWorkshop
                 }
             }
 
-            
+
 
             gridProductSuppliers.Columns[1].HeaderText = "Product Supplier ID";
             gridProductSuppliers.Columns[2].HeaderText = "Product Name";
@@ -81,8 +83,6 @@ namespace BrogrammersWorkshop
             ResetPrdSupplierPage();
             ResetProductList();
             ResetSupplierList();
-        
-
 
         }
 
@@ -135,7 +135,7 @@ namespace BrogrammersWorkshop
             pkgCancel.Enabled = true;
             gridprdpkg.DataSource = null;
             gridprdpkg.Rows.Clear();
-            lstPkg.Enabled=false;
+            lstPkg.Enabled = false;
             pkgADD.Enabled = false;
             pkgProductAdd.Enabled = false;
             pkgProductDelete.Enabled = false;
@@ -146,178 +146,191 @@ namespace BrogrammersWorkshop
         // saving Added Packges **NEED VALIDATION OF DATA
         private void pkgSave_Click(object sender, EventArgs e)
         {
-            DateTime dt;
-            bool validStart = DateTime.TryParseExact(txtPkgStrt.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
-            bool validEnd = DateTime.TryParseExact(txtPkgEndDate.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
-            if (validStart!=true)
-            {
-                MessageBox.Show("Please Eneter start Date in format in MM/dd/YYYY");
-                return;
-            }
-            if (validEnd != true)
-            {
-                MessageBox.Show("Please Eneter End Date in format in MM/dd/YYYY");
-                return;
-            }
+            if
+                         (
+                            Validation.IsPresent(txtPkgName, "Package Name") &&
 
-            
-            DateTime? StartDate = string.IsNullOrWhiteSpace(txtPkgStrt.Text)
+                            Validation.IsPresent(txtPkgStrt, "Package Start Date") &&
+                            Validation.IsCurrectDateTime(txtPkgStrt, "Package Start Date") &&
+
+                            Validation.IsPresent(txtPkgEndDate, "Package End Date") &&
+                            Validation.IsCurrectDateTime(txtPkgEndDate, "Package End Date") &&
+
+                            Validation.IsPresent(txtBasePrice, "Base Price") &&
+                            Validation.IsADecimal(txtBasePrice, "Base Price") &&
+
+                            Validation.IsPresent(txtCommission, "Commission") &&
+                            Validation.IsADecimal(txtCommission, "Commission") &&
+
+                            Validation.IsPresent(txtDesc, "Description")
+                          )
+
+            {
+
+                //JARED - not really sure what this does
+
+                DateTime? StartDate = string.IsNullOrWhiteSpace(txtPkgStrt.Text)
                           ? (DateTime?)null
                           : DateTime.Parse(txtPkgStrt.Text);
 
-            DateTime? EndDate = string.IsNullOrWhiteSpace(txtPkgEndDate.Text)
-              ? (DateTime?)null
-              : DateTime.Parse(txtPkgEndDate.Text);
-
-           
+                DateTime? EndDate = string.IsNullOrWhiteSpace(txtPkgEndDate.Text)
+                  ? (DateTime?)null
+                  : DateTime.Parse(txtPkgEndDate.Text);
 
 
-            Packages pckAdd = new Packages();
-            pckAdd.PkgName = txtPkgName.Text;
-            pckAdd.PkgStartDate = StartDate;
-            pckAdd.PkgEndDate = EndDate;
-            pckAdd.PkgDesc = txtDesc.Text;
-            pckAdd.PkgBasePrice =Convert.ToDecimal( txtBasePrice.Text.Replace("$", ""));
-            pckAdd.PkgAgencyCommission = Convert.ToDecimal(txtCommission.Text.Replace("$", ""));
 
 
-            PackagesDB.AddPackage(pckAdd);
+                Packages pckAdd = new Packages();
+                pckAdd.PkgName = txtPkgName.Text;
+                pckAdd.PkgStartDate = StartDate;
+                pckAdd.PkgEndDate = EndDate;
+                pckAdd.PkgDesc = txtDesc.Text;
+                pckAdd.PkgBasePrice = Convert.ToDecimal(txtBasePrice.Text.Replace("$", ""));
+                pckAdd.PkgAgencyCommission = Convert.ToDecimal(txtCommission.Text.Replace("$", ""));
 
-            lstPkg.Items.Clear();
 
-            List<Packages> packlstAdd = PackagesDB.GetPackages();
+                PackagesDB.AddPackage(pckAdd);
 
-            MessageBox.Show("Packages has been Added");
+                lstPkg.Items.Clear();
 
-            foreach (var pkg in packlstAdd)
-            {
+                List<Packages> packlstAdd = PackagesDB.GetPackages();
 
-                lstPkg.Items.Add(pkg.PkgName);
+                MessageBox.Show("Packages has been Added");
+
+                foreach (var pkg in packlstAdd)
+                {
+
+                    lstPkg.Items.Add(pkg.PkgName);
+                }
+
+                lstPkg.SelectedIndex = 0;
+                lstPkg.Enabled = true;
+
+                lstPkg.Items.Clear();
+                List<Packages> packupdated = PackagesDB.GetPackages();
+
+                foreach (var pkg in packupdated)
+                {
+
+                    lstPkg.Items.Add(pkg.PkgName);
+                }
+
+                lstPkg.SelectedIndex = 0;
+
+                ResetPackage();
+
             }
-
-            lstPkg.SelectedIndex =0;
-            lstPkg.Enabled = true;
-
-            lstPkg.Items.Clear();
-            List<Packages> packupdated = PackagesDB.GetPackages();
-
-            foreach (var pkg in packupdated)
-            {
-
-                lstPkg.Items.Add(pkg.PkgName);
-            }
-
-            lstPkg.SelectedIndex = 0;
-
-            ResetPackage();
-
-
         }
         // EDIT Packages 
         private void pkgEdit_Click(object sender, EventArgs e)
         {
-            
-            
-            
-            
-            txtPkgName.ReadOnly = false;
-            txtPkgStrt.ReadOnly = false;
-            txtPkgEndDate.ReadOnly = false;
-            txtBasePrice.ReadOnly = false;
-           
-            txtCommission.ReadOnly = false;
-            txtDesc.ReadOnly = false;
-         
-            txtCommission.ReadOnly = false;
+            if (
+                Validation.IsListSelected(lstPkg, "Available Packages")
+                )
+            {
+                txtPkgName.ReadOnly = false;
+                txtPkgStrt.ReadOnly = false;
+                txtPkgEndDate.ReadOnly = false;
+                txtBasePrice.ReadOnly = false;
 
-            pkgADD.Enabled = false;
-            pkgdelete.Enabled = false;
-            pkgSave.Enabled = false;
-            pkgCancel.Enabled = true;
-            saveEdit.Visible = true;
-            pkgProductAdd.Enabled = true;
-            pkgProductDelete.Enabled = true;
+                txtCommission.ReadOnly = false;
+                txtDesc.ReadOnly = false;
 
+                txtCommission.ReadOnly = false;
+
+                pkgADD.Enabled = false;
+                pkgdelete.Enabled = false;
+                pkgSave.Enabled = false;
+                pkgCancel.Enabled = true;
+                saveEdit.Visible = true;
+                pkgProductAdd.Enabled = true;
+                pkgProductDelete.Enabled = true;
+            }
         }
         // Save Edit Packages ** Need Validation of Data
         private void saveEdit_Click(object sender, EventArgs e)
-
-
         {
+            if
+             (
+                Validation.IsPresent(txtPkgName, "Package Name") &&
 
-            DateTime dt;
-            bool validStart = DateTime.TryParseExact(txtPkgStrt.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
-            bool validEnd = DateTime.TryParseExact(txtPkgEndDate.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt);
-            if (validStart != true)
+                Validation.IsPresent(txtPkgStrt, "Package Start Date") &&
+                Validation.IsCurrectDateTime(txtPkgStrt, "Package Start Date") &&
+
+                Validation.IsPresent(txtPkgEndDate, "Package End Date") &&
+                Validation.IsCurrectDateTime(txtPkgEndDate, "Package End Date") &&
+
+                Validation.IsPresent(txtBasePrice, "Base Price") &&
+                Validation.IsADecimal(txtBasePrice, "Base Price") &&
+
+                Validation.IsPresent(txtCommission, "Commission") &&
+                Validation.IsADecimal(txtCommission, "Commission") &&
+
+                Validation.IsPresent(txtDesc, "Description")
+              )
+
             {
-                MessageBox.Show("Please Eneter start Date in format in MM/dd/YYYY");
-                return;
-            }
-            if (validEnd != true)
-            {
-                MessageBox.Show("Please Eneter End Date in format in MM/dd/YYYY");
-                return;
-            }
 
-            var pack = PackagesDB.GetPackages();
-            Packages oldPck = new Packages();
+                var pack = PackagesDB.GetPackages();
+                Packages oldPck = new Packages();
 
-         
 
-            foreach (var item in pack)
-            {
-                if(item.PackageId == Convert.ToInt32(txtpkgID.Text))
+
+                foreach (var item in pack)
+                {
+                    if (item.PackageId == Convert.ToInt32(txtpkgID.Text))
                     {
-            
+
                         oldPck.PackageId = item.PackageId;
                         oldPck.PkgName = item.PkgName;
                         oldPck.PkgStartDate = item.PkgStartDate;
                         oldPck.PkgEndDate = item.PkgEndDate;
-                        oldPck.PkgDesc =item.PkgDesc;
+                        oldPck.PkgDesc = item.PkgDesc;
                         oldPck.PkgBasePrice = item.PkgBasePrice;
                         oldPck.PkgAgencyCommission = item.PkgAgencyCommission;
 
 
-                        
+
+                    }
+
+
+                }
+                DateTime? StartDate = string.IsNullOrWhiteSpace(txtPkgStrt.Text)
+                        ? (DateTime?)null
+                        : DateTime.Parse(txtPkgStrt.Text);
+
+                DateTime? EndDate = string.IsNullOrWhiteSpace(txtPkgEndDate.Text)
+                  ? (DateTime?)null
+                  : DateTime.Parse(txtPkgEndDate.Text);
+
+
+                Packages updtPck = new Packages();
+                updtPck.PackageId = Convert.ToInt32(txtpkgID.Text);
+                updtPck.PkgName = txtPkgName.Text;
+                updtPck.PkgStartDate = StartDate;
+                updtPck.PkgEndDate = EndDate;
+                updtPck.PkgDesc = txtDesc.Text;
+
+                updtPck.PkgBasePrice = Convert.ToDecimal(txtBasePrice.Text.Replace("$", ""));
+                updtPck.PkgAgencyCommission = Convert.ToDecimal(txtCommission.Text.Replace("$", ""));
+
+
+                PackagesDB.UpdatePackage(oldPck, updtPck);
+                MessageBox.Show("Packages has been updated");
+                lstPkg.Items.Clear();
+                List<Packages> packupdated = PackagesDB.GetPackages();
+
+                foreach (var pkg in packupdated)
+                {
+
+                    lstPkg.Items.Add(pkg.PkgName);
                 }
 
-               
+                lstPkg.SelectedIndex = 0;
+
+
+                ResetPackage();
             }
-            DateTime? StartDate = string.IsNullOrWhiteSpace(txtPkgStrt.Text)
-                    ? (DateTime?)null
-                    : DateTime.Parse(txtPkgStrt.Text);
-
-            DateTime? EndDate = string.IsNullOrWhiteSpace(txtPkgEndDate.Text)
-              ? (DateTime?)null
-              : DateTime.Parse(txtPkgEndDate.Text);
-
-
-            Packages updtPck = new Packages();
-            updtPck.PackageId = Convert.ToInt32(txtpkgID.Text);
-            updtPck.PkgName = txtPkgName.Text;
-            updtPck.PkgStartDate = StartDate;
-            updtPck.PkgEndDate = EndDate;
-            updtPck.PkgDesc = txtDesc.Text;
-
-            updtPck.PkgBasePrice = Convert.ToDecimal(txtBasePrice.Text.Replace("$", ""));
-            updtPck.PkgAgencyCommission = Convert.ToDecimal(txtCommission.Text.Replace("$", ""));
-
-
-            PackagesDB.UpdatePackage(oldPck, updtPck);
-            MessageBox.Show("Packages has been updated");
-            lstPkg.Items.Clear();
-            List<Packages> packupdated = PackagesDB.GetPackages();
-
-            foreach (var pkg in packupdated)
-            {
-
-                lstPkg.Items.Add(pkg.PkgName);
-            }
-
-            lstPkg.SelectedIndex = 0;
-
-
-            ResetPackage();
         }
         // Deleting Packages from Package ** Need Validation of Data
         private void pkgdelete_Click(object sender, EventArgs e)
@@ -326,66 +339,67 @@ namespace BrogrammersWorkshop
             Packages_Products_Suppliers pkgPrdDel = new Packages_Products_Suppliers();
             List<Packages> pack = PackagesDB.GetPackages();
 
+            if (
+                Validation.IsListSelected(lstPkg, "Available Packages")
+                )
 
-
-
-
-
-            foreach (var item in pack)
             {
-                if (item.PackageId == Convert.ToInt32(txtpkgID.Text)) // txt box is one number ahead of newly added items
+                foreach (var item in pack)
                 {
+                    if (item.PackageId == Convert.ToInt32(txtpkgID.Text)) // txt box is one number ahead of newly added items
+                    {
 
-                    pkgDel.PackageId = item.PackageId;
-                    pkgDel.PkgName = item.PkgName;
-                    pkgDel.PkgStartDate = item.PkgStartDate;
-                    pkgDel.PkgEndDate = item.PkgEndDate;
-                    pkgDel.PkgDesc = item.PkgDesc;
-                    pkgDel.PkgBasePrice = item.PkgBasePrice;
-                    pkgDel.PkgAgencyCommission = item.PkgAgencyCommission;
+                        pkgDel.PackageId = item.PackageId;
+                        pkgDel.PkgName = item.PkgName;
+                        pkgDel.PkgStartDate = item.PkgStartDate;
+                        pkgDel.PkgEndDate = item.PkgEndDate;
+                        pkgDel.PkgDesc = item.PkgDesc;
+                        pkgDel.PkgBasePrice = item.PkgBasePrice;
+                        pkgDel.PkgAgencyCommission = item.PkgAgencyCommission;
 
 
+                    }
                 }
+
+
+                var productSupplierid = from item in Products_SuppliersDB.GetProductsSuppliers()
+                                        where item.PackageId == Convert.ToInt32(txtpkgID.Text)
+                                        select new { item.ProductSupplierId };
+
+
+                Packages_Products_Suppliers pkgDelPro = new Packages_Products_Suppliers();
+
+                var id = productSupplierid.ToList();
+
+                foreach (var item in id)
+                {
+                    pkgDelPro.ProductSupplierId = item.ProductSupplierId;
+                }
+                pkgDelPro.PackageId = Convert.ToInt32(txtpkgID.Text);
+
+                Packages_Products_SuppliersDB.DeletePackagePro(pkgDelPro);
+
+
+
+                PackagesDB.DeletePackage(pkgDel);
+                lstPkg.Items.Clear();
+                MessageBox.Show("Packages has been Deleted");
+
+
+
+                List<Packages> packupdatedel = PackagesDB.GetPackages();
+                foreach (var pkg in packupdatedel)
+                {
+                    lstPkg.Items.Add(pkg.PkgName);
+                }
+
+
+
+                ResetPackage();
+
+
             }
-
-            var productSupplierid = from item in Products_SuppliersDB.GetProductsSuppliers()
-                                    where item.PackageId == Convert.ToInt32(txtpkgID.Text)
-                                    select new { item.ProductSupplierId };
-
-
-            Packages_Products_Suppliers pkgDelPro = new Packages_Products_Suppliers();
-
-            var id = productSupplierid.ToList();
-
-            foreach (var item in id)
-            {
-                pkgDelPro.ProductSupplierId = item.ProductSupplierId;
-            }
-            pkgDelPro.PackageId = Convert.ToInt32(txtpkgID.Text);
-
-            Packages_Products_SuppliersDB.DeletePackagePro(pkgDelPro);
-
-
-
-            PackagesDB.DeletePackage(pkgDel);
-            lstPkg.Items.Clear();
-            MessageBox.Show("Packages has been Deleted");
-
-
-
-            List<Packages> packupdatedel = PackagesDB.GetPackages();
-            foreach (var pkg in packupdatedel)
-            {
-                lstPkg.Items.Add(pkg.PkgName);
-            }
-
-
-
-            ResetPackage();
-
-
         }
-
         private void metroTabPage1_Click(object sender, EventArgs e)
         {
             lstPkg.Enabled = true;
@@ -393,7 +407,7 @@ namespace BrogrammersWorkshop
 
         private void lstProducts_SelectedIndexChanged(object sender, EventArgs e)
         {
-           
+
         }
         // Adding Product to Product list 
         private void btnAddProduct_Click(object sender, EventArgs e)
@@ -409,7 +423,7 @@ namespace BrogrammersWorkshop
         // adding Supplier in Supplier data table 
         private void btnAddSupplier_Click(object sender, EventArgs e)
         {
-            
+
             lblSupplierName.Visible = true;
             txtSupplier.Visible = true;
             btnSaveAddSupp.Visible = true;
@@ -420,16 +434,12 @@ namespace BrogrammersWorkshop
         // Adding Product to Product list ** Need Validation of Data
         private void btnAddSaveProd_Click(object sender, EventArgs e)
         {
-            Products prodAdd = new Products();
+            if (Validation.IsPresent(txtProductName, "Product Name"))
+            {
+                Products prodAdd = new Products();
 
-            prodAdd.ProdName = txtProductName.Text;
+                prodAdd.ProdName = txtProductName.Text;
 
-            ProductsDB.AddProduct(prodAdd);
-
-            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
-            ResetProductList();
-            ResetPrdSupplierPage();
-            ResetProductSupllierList();
 
           
             List<int> prod = ProductsDB.GetProductID();
@@ -454,30 +464,40 @@ namespace BrogrammersWorkshop
             comboSupplier.DataSource = null;
             comboSupplier.DataSource = supplier;
 
+                ProductsDB.AddProduct(prodAdd);
 
+
+                gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+                ResetProductList();
+                ResetPrdSupplierPage();
+                ResetProductSupllierList();
+
+                txtProductName.Text = "";
+            }
 
         }
         // Adding Supplier to supplier table  ** Need Validation of Data
         private void btnSaveAddSupp_Click(object sender, EventArgs e)
         {
-            Suppliers suppAdd = new Suppliers();
+            if (Validation.IsPresent(txtSupplier, "Supplier Name"))
+            {
+                Suppliers suppAdd = new Suppliers();
+
 
             List<int> supp = SuppliersDB.GetSupplierIDs();
             var newsuppindex = supp[supp.Count - 1] + 1;
 
-            suppAdd.SupplierID= newsuppindex ;
 
-            suppAdd.SupName = txtSupplier.Text;
+                suppAdd.SupplierID = newsuppindex;
 
-            SuppliersDB.AddSupplier(suppAdd);
+                suppAdd.SupName = txtSupplier.Text;
 
-            MessageBox.Show("Supplier has been Added");
+                SuppliersDB.AddSupplier(suppAdd);
 
-            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
-        
-            ResetSupplierList();
-            ResetPrdSupplierPage();
-            ResetProductSupllierList();
+                MessageBox.Show("Supplier has been Added");
+
+                gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+
 
             List<int> suppupdated = SuppliersDB.GetSupplierIDs();
             List<string> supplier = new List<string>();
@@ -501,16 +521,19 @@ namespace BrogrammersWorkshop
             comboProduct.DataSource = null;
             comboProduct.DataSource = product;
 
+                ResetSupplierList();
+                ResetPrdSupplierPage();
+                ResetProductSupllierList();
 
+                txtSupplier.Text = "";
+            }
         }
-
-
 
 
         public void ResetProductList()
         {
             lstProducts.Items.Clear();
-             List<int> prod1 = ProductsDB.GetProductID();
+            List<int> prod1 = ProductsDB.GetProductID();
             foreach (var prdItem in prod1)
             {
                 lstProducts.Items.Add(ProductsDB.GetProduct(prdItem).ProdName);
@@ -556,6 +579,7 @@ namespace BrogrammersWorkshop
         private void btnResetSupplier_Click(object sender, EventArgs e)
         {
             ResetSupplierList();
+            txtSupplier.Text = "";
 
         }
 
@@ -566,16 +590,12 @@ namespace BrogrammersWorkshop
         {
             ResetProductList();
             ResetPrdSupplierPage();
+            txtProductName.Text = "";
         }
         // Editing Products in Products table  ** Need Validation of Data
         private void btnEditProducts_Click(object sender, EventArgs e)
-        {   
-            if (lstProducts.SelectedItem == null)
-            {
-                MessageBox.Show("Please Select a Product to edit");
-
-            }
-            else
+        {
+            if (Validation.IsListSelected(lstProducts, "Products"))
             {
                 txtProductName.Visible = true;
                 btnUpdateProduct.Visible = true;
@@ -586,21 +606,17 @@ namespace BrogrammersWorkshop
                 txtProductName.Focus();
                 txtProductName.Text = lstProducts.SelectedItem.ToString();
 
-                
+
 
 
             }
-           
+
         }
         //  Editing Supplier in Supplier  Table ** Need Validation of Data
         private void btnEditSupplier_Click(object sender, EventArgs e)
         {
-            if (lstSupplier.SelectedItem == null)
-            {
-                MessageBox.Show("Please Select a  Supplier to edit");
+            if (Validation.IsListSelected(lstSupplier, "Suppliers"))
 
-            }
-            else
             {
                 
                 txtSupplier.Visible = true;
@@ -620,67 +636,78 @@ namespace BrogrammersWorkshop
 
         private void btnUpdateProduct_Click(object sender, EventArgs e)
         {
-            updateProductname(lstProducts.SelectedItem.ToString(), txtProductName.Text);
-          
-            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
-            ResetPrdSupplierPage();
-            ResetProductSupllierList();
-           
-            ResetProductList();
 
-            List<int> prod = ProductsDB.GetProductID();
-            List<string> product = new List<string>();
+            if(Validation.IsPresent(txtProductName, "Product Name"))
+            { 
+                updateProductname(lstProducts.SelectedItem.ToString(), txtProductName.Text);
 
-            foreach (var prd in prod)
-            {
-                product.Add(ProductsDB.GetProduct(prd).ProdName);
+                gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+                ResetPrdSupplierPage();
+                ResetProductSupllierList();
+
+                ResetProductList();
+
+	            List<int> prod = ProductsDB.GetProductID();
+	            List<string> product = new List<string>();
+
+	            foreach (var prd in prod)
+	            {
+	                product.Add(ProductsDB.GetProduct(prd).ProdName);
+	            }
+	            comboProduct.DataSource = null;
+	            comboProduct.DataSource = product;
+
+	            List<int> suppupdated = SuppliersDB.GetSupplierIDs();
+	            List<string> supplier = new List<string>();
+
+	            foreach (var sup in suppupdated)
+	            {
+	                supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
+	            }
+
+	            comboSupplier.DataSource = null;
+	            comboSupplier.DataSource = supplier;
+
+                txtProductName.Text = "";
             }
-            comboProduct.DataSource = null;
-            comboProduct.DataSource = product;
-
-            List<int> suppupdated = SuppliersDB.GetSupplierIDs();
-            List<string> supplier = new List<string>();
-
-            foreach (var sup in suppupdated)
-            {
-                supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
-            }
-
-            comboSupplier.DataSource = null;
-            comboSupplier.DataSource = supplier;
 
         }
-        
+
 
         private void btnUpdateSupplier_Click(object sender, EventArgs e)
         {
-            updateSupplierName(lstSupplier.SelectedItem.ToString(), txtSupplier.Text);
-            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
-            ResetPrdSupplierPage();
-            ResetProductSupllierList();
-            ResetSupplierList();
-
-            List<int> suppupdated = SuppliersDB.GetSupplierIDs();
-            List<string> supplier = new List<string>();
-
-            foreach (var sup in suppupdated)
+          	
+			if (Validation.IsPresent(txtSupplier, "Supplier Name"))
             {
-                supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
+	            updateSupplierName(lstSupplier.SelectedItem.ToString(), txtSupplier.Text);
+	            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+	            ResetPrdSupplierPage();
+	            ResetProductSupllierList();
+	            ResetSupplierList();
+
+	            List<int> suppupdated = SuppliersDB.GetSupplierIDs();
+	            List<string> supplier = new List<string>();
+
+	            foreach (var sup in suppupdated)
+	            {
+	                supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
+	            }
+	            comboSupplier.DataSource = supplier;
+
+
+
+	            List<int> prod = ProductsDB.GetProductID();
+	            List<string> product = new List<string>();
+
+	            foreach (var prd in prod)
+	            {
+	                product.Add(ProductsDB.GetProduct(prd).ProdName);
+	            }
+	            comboProduct.DataSource = null;
+	            comboProduct.DataSource = product;
+
+                txtSupplier.Text = "";
             }
-            comboSupplier.DataSource = supplier;
-
-
-
-            List<int> prod = ProductsDB.GetProductID();
-            List<string> product = new List<string>();
-
-            foreach (var prd in prod)
-            {
-                product.Add(ProductsDB.GetProduct(prd).ProdName);
-            }
-            comboProduct.DataSource = null;
-            comboProduct.DataSource = product;
-
         }
 
 
@@ -771,9 +798,9 @@ namespace BrogrammersWorkshop
             }
         }
 
-
         public void updateSupplierName(string supplierName,string updatedsupplierName)
         {   List<int> supp = SuppliersDB.GetSupplierIDs();
+
             foreach (var item in supp)
             {
 
@@ -790,8 +817,6 @@ namespace BrogrammersWorkshop
 
                     MessageBox.Show("Supplier Updated");
 
-
-
                 }
 
 
@@ -802,12 +827,13 @@ namespace BrogrammersWorkshop
 
         private void btnEditAddProductSupplier_Click(object sender, EventArgs e)
         {
-            try
+
+                try
             {
-               
+
 
                 var supplierproductID = gridProductSuppliers.CurrentRow.Cells[1].Value.ToString();
-                txtPrdSupPrdName.Text=gridProductSuppliers.CurrentRow.Cells[2].Value.ToString();
+                txtPrdSupPrdName.Text = gridProductSuppliers.CurrentRow.Cells[2].Value.ToString();
                 txtAddSupSupName.Text = gridProductSuppliers.CurrentRow.Cells[3].Value.ToString();
 
                 addProdSupp.Visible = true;
@@ -833,12 +859,12 @@ namespace BrogrammersWorkshop
 
                 ResetPrdSupplierPage();
             }
-            
+
         }
         // Editing Product_supplier table ** Need Validation of Data
         private void btnAddPrdSaveEdit_Click(object sender, EventArgs e)
         {
-      
+
             updateProductname(gridProductSuppliers.CurrentRow.Cells[2].Value.ToString(), txtPrdSupPrdName.Text);
             updateSupplierName(gridProductSuppliers.CurrentRow.Cells[3].Value.ToString(), txtAddSupSupName.Text);
             MessageBox.Show("Data Updated");
@@ -854,7 +880,7 @@ namespace BrogrammersWorkshop
         {
             listSuppPkg.Items.Clear();
 
-     
+
             foreach (var supname in productSupplierList)
             {
                 if (supname.ProdName == comboPrdPack.SelectedItem.ToString())
@@ -868,24 +894,18 @@ namespace BrogrammersWorkshop
         private void pkgProductAdd_Click(object sender, EventArgs e)
 
         {
-            try
+
+            if (
+                Validation.IsListSelected(lstPkg, "Available Packages") &&
+                Validation.IsListSelected(listSuppPkg, "Suppliers")
+                )
             {
                 PackProductUpdate();
                 try
                 {
-                    if (lstPkg.SelectedIndex == -1)
-                    {
-
-                        MessageBox.Show("Please Select a Package to add the Product");
-
-                    }
-
-
-                    else
-                    {
-                        var productSupplierid = from item in productSupplierList
-                                                where item.ProdName == comboPrdPack.SelectedItem.ToString() && item.SupName == listSuppPkg.SelectedItem.ToString()
-                                                select new { item.ProductSupplierId };
+                    var productSupplierid = from item in productSupplierList
+                                            where item.ProdName == comboPrdPack.SelectedItem.ToString() && item.SupName == listSuppPkg.SelectedItem.ToString()
+                                            select new { item.ProductSupplierId };
 
 
                         Packages_Products_Suppliers pkgAddPro = new Packages_Products_Suppliers();
@@ -904,7 +924,7 @@ namespace BrogrammersWorkshop
 
                         PackProductUpdate();
 
-                    }
+                    
                 }
 
                 catch
@@ -913,74 +933,53 @@ namespace BrogrammersWorkshop
                     MessageBox.Show("Product Already in the Packages OR Product/Suppleir not Selected for Add");
                 }
             }
-            catch
-            {
-                MessageBox.Show("Please Select Package to ADD products..");
-            }
-
-            
-            
-
-          
-
-
-
-
-
-
         }
+
 
         // Deleting Product From Packages
         private void pkgProductDelete_Click(object sender, EventArgs e)
         {
-      
-
-            try
+            if (
+                Validation.IsListSelected(lstPkg, "Available Packages")
+                )
             {
-                var pkgProductName = gridprdpkg.CurrentRow.Cells[0].Value.ToString();
-                var pkgSupplierName = gridprdpkg.CurrentRow.Cells[1].Value.ToString();
 
 
-                var pkgProductSupplierId = from item in productSupplierList
-                                           where item.ProdName == pkgProductName && item.SupName == pkgSupplierName
-                                           select new { item.ProductSupplierId };
+                    var pkgProductName = gridprdpkg.CurrentRow.Cells[0].Value.ToString();
+                    var pkgSupplierName = gridprdpkg.CurrentRow.Cells[1].Value.ToString();
 
-                Packages_Products_Suppliers pkgDeletePro = new Packages_Products_Suppliers();
 
-                var id = pkgProductSupplierId.ToList();
+                    var pkgProductSupplierId = from item in productSupplierList
+                                               where item.ProdName == pkgProductName && item.SupName == pkgSupplierName
+                                               select new { item.ProductSupplierId };
 
-                foreach (var item in id)
-                {
-                    pkgDeletePro.ProductSupplierId = item.ProductSupplierId;
-                }
+                    Packages_Products_Suppliers pkgDeletePro = new Packages_Products_Suppliers();
 
-                pkgDeletePro.PackageId = Convert.ToInt32(txtpkgID.Text);
+                    var id = pkgProductSupplierId.ToList();
 
-                Packages_Products_SuppliersDB.DeletePackageProSupplier(pkgDeletePro);
+                    foreach (var item in id)
+                    {
+                        pkgDeletePro.ProductSupplierId = item.ProductSupplierId;
+                    }
 
-                MessageBox.Show("Proucts Deleted");
+                    pkgDeletePro.PackageId = Convert.ToInt32(txtpkgID.Text);
 
-                PackProductUpdate();
+                    Packages_Products_SuppliersDB.DeletePackageProSupplier(pkgDeletePro);
+
+                    MessageBox.Show("Proucts Deleted");
+
+                    PackProductUpdate();
             }
 
-            catch
 
-            {
-                MessageBox.Show("Please Select an Package+Product  to Delete");
-            }
 
-               
-               
-          
-              
-
-              //  PackProductUpdate();
+            //  PackProductUpdate();
 
 
         }
 
 
-       
+
 
 
         private void pkgCancel_Click(object sender, EventArgs e)
@@ -1006,8 +1005,8 @@ namespace BrogrammersWorkshop
             txtPkgName.ReadOnly = true;
 
             txtPkgStrt.ReadOnly = true;
-          
-       
+
+
             txtPkgEndDate.ReadOnly = true;
             txtBasePrice.ReadOnly = true;
 
@@ -1019,18 +1018,18 @@ namespace BrogrammersWorkshop
 
 
             PackageListLoad();
-         
 
-           
+
+
         }
 
         public void PackageListLoad()
         {
-           
-            var pack= PackagesDB.GetPackages();
 
-           
-            
+            var pack = PackagesDB.GetPackages();
+
+
+
             foreach (var item in pack)
             {
 
@@ -1077,10 +1076,10 @@ namespace BrogrammersWorkshop
 
             ResetPrdSupplierPage();
 
-            
+
         }
 
-        public void  ResetPrdSupplierPage()
+        public void ResetPrdSupplierPage()
         {
             addProdSupp.Visible = true;
             btnEditAddProductSupplier.Visible = true;
@@ -1143,11 +1142,11 @@ namespace BrogrammersWorkshop
 
                 MessageBox.Show("Cannot Delete at this moment as this supplied id is linked with  booking details table.Plaese select another one to delete");
             }
-      
-                
+
+
         }
 
-        public  void ResetProductSupllierList()
+        public void ResetProductSupllierList()
         {
             lstPkg.Items.Clear();
             List<Packages> packupdated = PackagesDB.GetPackages();
@@ -1160,10 +1159,10 @@ namespace BrogrammersWorkshop
 
             lstPkg.SelectedIndex = 0;
 
- 
 
 
-           productSupplierList = Products_SuppliersDB.GetProductsSuppliers();
+
+            productSupplierList = Products_SuppliersDB.GetProductsSuppliers();
             var distinctPrd = productSupplierList.Select(o => o.ProdName).Distinct().ToList();
             comboPrdPack.DataSource = distinctPrd;
             comboProduct.DataSource = product;
@@ -1179,6 +1178,7 @@ namespace BrogrammersWorkshop
                 }
             }
         }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
