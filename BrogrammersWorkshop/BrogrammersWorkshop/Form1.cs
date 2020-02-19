@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -82,8 +83,6 @@ namespace BrogrammersWorkshop
             ResetPrdSupplierPage();
             ResetProductList();
             ResetSupplierList();
-
-
 
         }
 
@@ -339,66 +338,66 @@ namespace BrogrammersWorkshop
             Packages pkgDel = new Packages();
             Packages_Products_Suppliers pkgPrdDel = new Packages_Products_Suppliers();
 
-
-
-
-
-
-            foreach (var item in pack)
+            if (
+                Validation.IsListSelected(lstPkg, "Available Packages")
+                )
             {
-                if (item.PackageId == Convert.ToInt32(txtpkgID.Text)) // txt box is one number ahead of newly added items
+                foreach (var item in pack)
                 {
+                    if (item.PackageId == Convert.ToInt32(txtpkgID.Text)) // txt box is one number ahead of newly added items
+                    {
 
-                    pkgDel.PackageId = item.PackageId;
-                    pkgDel.PkgName = item.PkgName;
-                    pkgDel.PkgStartDate = item.PkgStartDate;
-                    pkgDel.PkgEndDate = item.PkgEndDate;
-                    pkgDel.PkgDesc = item.PkgDesc;
-                    pkgDel.PkgBasePrice = item.PkgBasePrice;
-                    pkgDel.PkgAgencyCommission = item.PkgAgencyCommission;
+                        pkgDel.PackageId = item.PackageId;
+                        pkgDel.PkgName = item.PkgName;
+                        pkgDel.PkgStartDate = item.PkgStartDate;
+                        pkgDel.PkgEndDate = item.PkgEndDate;
+                        pkgDel.PkgDesc = item.PkgDesc;
+                        pkgDel.PkgBasePrice = item.PkgBasePrice;
+                        pkgDel.PkgAgencyCommission = item.PkgAgencyCommission;
 
 
+                    }
                 }
+
+
+                var productSupplierid = from item in Products_SuppliersDB.GetProductsSuppliers()
+                                        where item.PackageId == Convert.ToInt32(txtpkgID.Text)
+                                        select new { item.ProductSupplierId };
+
+
+                Packages_Products_Suppliers pkgDelPro = new Packages_Products_Suppliers();
+
+                var id = productSupplierid.ToList();
+
+                foreach (var item in id)
+                {
+                    pkgDelPro.ProductSupplierId = item.ProductSupplierId;
+                }
+                pkgDelPro.PackageId = Convert.ToInt32(txtpkgID.Text);
+
+                Packages_Products_SuppliersDB.DeletePackagePro(pkgDelPro);
+
+
+
+                PackagesDB.DeletePackage(pkgDel);
+                lstPkg.Items.Clear();
+                MessageBox.Show("Packages has been Deleted");
+
+
+
+                List<Packages> packupdatedel = PackagesDB.GetPackages();
+                foreach (var pkg in packupdatedel)
+                {
+                    lstPkg.Items.Add(pkg.PkgName);
+                }
+
+
+
+                ResetPackage();
+
+
             }
-
-            var productSupplierid = from item in Products_SuppliersDB.GetProductsSuppliers()
-                                    where item.PackageId == Convert.ToInt32(txtpkgID.Text)
-                                    select new { item.ProductSupplierId };
-
-
-            Packages_Products_Suppliers pkgDelPro = new Packages_Products_Suppliers();
-
-            var id = productSupplierid.ToList();
-
-            foreach (var item in id)
-            {
-                pkgDelPro.ProductSupplierId = item.ProductSupplierId;
-            }
-            pkgDelPro.PackageId = Convert.ToInt32(txtpkgID.Text);
-
-            Packages_Products_SuppliersDB.DeletePackagePro(pkgDelPro);
-
-
-
-            PackagesDB.DeletePackage(pkgDel);
-            lstPkg.Items.Clear();
-            MessageBox.Show("Packages has been Deleted");
-
-
-
-            List<Packages> packupdatedel = PackagesDB.GetPackages();
-            foreach (var pkg in packupdatedel)
-            {
-                lstPkg.Items.Add(pkg.PkgName);
-            }
-
-
-
-            ResetPackage();
-
-
         }
-
         private void metroTabPage1_Click(object sender, EventArgs e)
         {
             lstPkg.Enabled = true;
@@ -433,46 +432,49 @@ namespace BrogrammersWorkshop
         // Adding Product to Product list ** Need Validation of Data
         private void btnAddSaveProd_Click(object sender, EventArgs e)
         {
-            Products prodAdd = new Products();
+            if (Validation.IsPresent(txtProductName, "Product Name"))
+            {
+                Products prodAdd = new Products();
 
-            prodAdd.ProdName = txtProductName.Text;
+                prodAdd.ProdName = txtProductName.Text;
 
-            ProductsDB.AddProduct(prodAdd);
+                ProductsDB.AddProduct(prodAdd);
 
-            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
-            ResetProductList();
-            ResetPrdSupplierPage();
-            ResetProductSupllierList();
+                gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+                ResetProductList();
+                ResetPrdSupplierPage();
+                ResetProductSupllierList();
 
-
-
+                txtProductName.Text = "";
+            }
 
         }
         // Adding Supplier to supplier table  ** Need Validation of Data
         private void btnSaveAddSupp_Click(object sender, EventArgs e)
         {
-            Suppliers suppAdd = new Suppliers();
+            if (Validation.IsPresent(txtSupplier, "Supplier Name"))
+            {
+                Suppliers suppAdd = new Suppliers();
 
-            var newsuppindex = supp[supp.Count - 1] + 1;
+                var newsuppindex = supp[supp.Count - 1] + 1;
 
-            suppAdd.SupplierID = newsuppindex;
+                suppAdd.SupplierID = newsuppindex;
 
-            suppAdd.SupName = txtSupplier.Text;
+                suppAdd.SupName = txtSupplier.Text;
 
-            SuppliersDB.AddSupplier(suppAdd);
+                SuppliersDB.AddSupplier(suppAdd);
 
-            MessageBox.Show("Supplier has been Added");
+                MessageBox.Show("Supplier has been Added");
 
-            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+                gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
 
-            ResetSupplierList();
-            ResetPrdSupplierPage();
-            ResetProductSupllierList();
+                ResetSupplierList();
+                ResetPrdSupplierPage();
+                ResetProductSupllierList();
 
-
+                txtSupplier.Text = "";
+            }
         }
-
-
 
 
         public void ResetProductList()
@@ -524,6 +526,7 @@ namespace BrogrammersWorkshop
         private void btnResetSupplier_Click(object sender, EventArgs e)
         {
             ResetSupplierList();
+            txtSupplier.Text = "";
 
         }
 
@@ -534,16 +537,12 @@ namespace BrogrammersWorkshop
         {
             ResetProductList();
             ResetPrdSupplierPage();
+            txtProductName.Text = "";
         }
         // Editing Products in Products table  ** Need Validation of Data
         private void btnEditProducts_Click(object sender, EventArgs e)
         {
-            if (lstProducts.SelectedItem == null)
-            {
-                MessageBox.Show("Please Select a Product to edit");
-
-            }
-            else
+            if (Validation.IsListSelected(lstProducts, "Products"))
             {
                 txtProductName.Visible = true;
                 btnUpdateProduct.Visible = true;
@@ -563,12 +562,8 @@ namespace BrogrammersWorkshop
         //  Editing Supplier in Supplier  Table ** Need Validation of Data
         private void btnEditSupplier_Click(object sender, EventArgs e)
         {
-            if (lstSupplier.SelectedItem == null)
-            {
-                MessageBox.Show("Please Select a  Supplier to edit");
+            if (Validation.IsListSelected(lstSupplier, "Suppliers"))
 
-            }
-            else
             {
                 txtSupplier.Visible = true;
                 btnUpdateSupplier.Visible = true;
@@ -587,24 +582,33 @@ namespace BrogrammersWorkshop
 
         private void btnUpdateProduct_Click(object sender, EventArgs e)
         {
-            updateProductname(lstProducts.SelectedItem.ToString(), txtProductName.Text);
+            if(Validation.IsPresent(txtProductName, "Product Name"))
+            { 
+                updateProductname(lstProducts.SelectedItem.ToString(), txtProductName.Text);
 
-            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
-            ResetPrdSupplierPage();
-            ResetProductSupllierList();
+                gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+                ResetPrdSupplierPage();
+                ResetProductSupllierList();
 
-            ResetProductList();
+                ResetProductList();
 
+                txtProductName.Text = "";
+            }
         }
 
 
         private void btnUpdateSupplier_Click(object sender, EventArgs e)
         {
-            updateSupplierName(lstSupplier.SelectedItem.ToString(), txtSupplier.Text);
-            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
-            ResetPrdSupplierPage();
-            ResetProductSupllierList();
-            ResetSupplierList();
+            if (Validation.IsPresent(txtSupplier, "Supplier Name"))
+            {
+                updateSupplierName(lstSupplier.SelectedItem.ToString(), txtSupplier.Text);
+                gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+                ResetPrdSupplierPage();
+                ResetProductSupllierList();
+                ResetSupplierList();
+
+                txtSupplier.Text = "";
+            }
         }
 
 
@@ -716,7 +720,8 @@ namespace BrogrammersWorkshop
 
         private void btnEditAddProductSupplier_Click(object sender, EventArgs e)
         {
-            try
+
+                try
             {
 
 

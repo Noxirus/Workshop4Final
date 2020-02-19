@@ -623,6 +623,7 @@
             // 
             // txtPkgName
             // 
+            this.txtPkgName.BackColor = System.Drawing.SystemColors.Control;
             // 
             // 
             // 
