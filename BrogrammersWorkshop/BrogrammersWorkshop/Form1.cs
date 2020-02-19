@@ -431,6 +431,17 @@ namespace BrogrammersWorkshop
             ResetPrdSupplierPage();
             ResetProductSupllierList();
 
+          
+            List<int> prod = ProductsDB.GetProductID();
+            List<string> product = new List<string>();
+
+            foreach (var prd in prod)
+            {
+                product.Add(ProductsDB.GetProduct(prd).ProdName);
+            }
+            comboProduct.DataSource = null;
+            comboProduct.DataSource = product;
+
 
 
 
@@ -455,6 +466,15 @@ namespace BrogrammersWorkshop
             ResetSupplierList();
             ResetPrdSupplierPage();
             ResetProductSupllierList();
+
+            List<int> suppupdated = SuppliersDB.GetSupplierIDs();
+            List<string> supplier = new List<string>();
+
+            foreach (var sup in suppupdated)
+            {
+                supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
+            }
+            comboSupplier.DataSource = supplier;
 
 
         }
@@ -582,7 +602,17 @@ namespace BrogrammersWorkshop
             ResetProductSupllierList();
            
             ResetProductList();
-          
+
+            List<int> prod = ProductsDB.GetProductID();
+            List<string> product = new List<string>();
+
+            foreach (var prd in prod)
+            {
+                product.Add(ProductsDB.GetProduct(prd).ProdName);
+            }
+            comboProduct.DataSource = null;
+            comboProduct.DataSource = product;
+
         }
         
 
@@ -593,9 +623,19 @@ namespace BrogrammersWorkshop
             ResetPrdSupplierPage();
             ResetProductSupllierList();
             ResetSupplierList();
+
+            List<int> suppupdated = SuppliersDB.GetSupplierIDs();
+            List<string> supplier = new List<string>();
+
+            foreach (var sup in suppupdated)
+            {
+                supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
+            }
+            comboSupplier.DataSource = supplier;
+
         }
 
-        
+
 
         private void saveProdSup_Click(object sender, EventArgs e)
         {
@@ -605,7 +645,8 @@ namespace BrogrammersWorkshop
             {
                 Products_Suppliers addPrdSupp = new Products_Suppliers();
 
-
+                List<int> prod = ProductsDB.GetProductID();
+                List<int> supp = SuppliersDB.GetSupplierIDs();
 
                 foreach (var item in prod)
                 {

@@ -125,7 +125,7 @@
             this.Packages.FontWeight = MetroFramework.MetroTabControlWeight.Bold;
             this.Packages.Location = new System.Drawing.Point(35, 72);
             this.Packages.Name = "Packages";
-            this.Packages.SelectedIndex = 2;
+            this.Packages.SelectedIndex = 1;
             this.Packages.Size = new System.Drawing.Size(950, 670);
             this.Packages.TabIndex = 1;
             this.Packages.UseCustomForeColor = true;
@@ -841,7 +841,7 @@
             this.txtAddSupSupName.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
             this.txtAddSupSupName.ForeColor = System.Drawing.Color.Red;
             this.txtAddSupSupName.Lines = new string[0];
-            this.txtAddSupSupName.Location = new System.Drawing.Point(199, 75);
+            this.txtAddSupSupName.Location = new System.Drawing.Point(199, 118);
             this.txtAddSupSupName.MaxLength = 32767;
             this.txtAddSupSupName.Name = "txtAddSupSupName";
             this.txtAddSupSupName.PasswordChar = '\0';
@@ -875,7 +875,7 @@
             this.txtPrdSupPrdName.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
             this.txtPrdSupPrdName.ForeColor = System.Drawing.Color.Red;
             this.txtPrdSupPrdName.Lines = new string[0];
-            this.txtPrdSupPrdName.Location = new System.Drawing.Point(199, 118);
+            this.txtPrdSupPrdName.Location = new System.Drawing.Point(199, 75);
             this.txtPrdSupPrdName.MaxLength = 32767;
             this.txtPrdSupPrdName.Name = "txtPrdSupPrdName";
             this.txtPrdSupPrdName.PasswordChar = '\0';
