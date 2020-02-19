@@ -30,7 +30,7 @@ namespace BrogrammersWorkshop
             {
 
                 isValid = false;
-                MessageBox.Show(name + " must be a number \nType: Int32", "Input Error");
+                MessageBox.Show(name + " must be a number \nType: Decimal", "Input Error");
                 txtBox.SelectAll();
                 txtBox.Focus();
             }
@@ -57,7 +57,7 @@ namespace BrogrammersWorkshop
             if (!DateTime.TryParseExact(txtBox.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt)) 
             {
                 isValid = false;
-                MessageBox.Show("Please Eneter start Date in format in MM/DD/YYYY", "Input Error");
+                MessageBox.Show("Please eneter " + name + " in format in MM/DD/YYYY", "Input Error");
             }
             return isValid;
         }
@@ -81,6 +81,17 @@ namespace BrogrammersWorkshop
                 MessageBox.Show(name + "must be positive or zero", "Input Error");
                 txtBox.SelectAll();
                 txtBox.Focus();
+            }
+            return isValid;
+        }
+        public static bool IsListSelected(ListBox list, string name)
+        {
+            bool isValid = true;
+            
+            if (list.SelectedIndex == -1)
+            {
+                isValid = false;
+                MessageBox.Show("Please select a list item from " + name, "Missing Selections");
             }
             return isValid;
         }
