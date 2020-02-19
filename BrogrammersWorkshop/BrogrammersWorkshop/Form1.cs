@@ -1036,7 +1036,7 @@ namespace BrogrammersWorkshop
             catch
             {
 
-                MessageBox.Show("Please Select an item to Delete");
+                MessageBox.Show("Cannot Delete at this moment as this supplied id is linked with  booking details table");
             }
       
                 
