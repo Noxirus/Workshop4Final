@@ -771,48 +771,56 @@ namespace BrogrammersWorkshop
         private void pkgProductAdd_Click(object sender, EventArgs e)
 
         {
-            PackProductUpdate();
             try
             {
-                if (lstPkg.SelectedIndex == -1)
+                PackProductUpdate();
+                try
                 {
+                    if (lstPkg.SelectedIndex == -1)
+                    {
 
-                    MessageBox.Show("Please Select a Package to add the Product");
+                        MessageBox.Show("Please Select a Package to add the Product");
 
+                    }
+
+
+                    else
+                    {
+                        var productSupplierid = from item in productSupplierList
+                                                where item.ProdName == comboPrdPack.SelectedItem.ToString() && item.SupName == listSuppPkg.SelectedItem.ToString()
+                                                select new { item.ProductSupplierId };
+
+
+                        Packages_Products_Suppliers pkgAddPro = new Packages_Products_Suppliers();
+
+                        var id = productSupplierid.ToList();
+
+                        foreach (var item in id)
+                        {
+                            pkgAddPro.ProductSupplierId = item.ProductSupplierId;
+                        }
+                        pkgAddPro.PackageId = Convert.ToInt32(txtpkgID.Text);
+
+                        Packages_Products_SuppliersDB.AddPackageProduct(pkgAddPro);
+
+                        MessageBox.Show("Proucts Added");
+
+                        PackProductUpdate();
+
+                    }
                 }
 
-
-                else
+                catch
                 {
-                    var productSupplierid = from item in productSupplierList
-                                            where item.ProdName == comboPrdPack.SelectedItem.ToString() && item.SupName == listSuppPkg.SelectedItem.ToString()
-                                            select new { item.ProductSupplierId };
 
-
-                    Packages_Products_Suppliers pkgAddPro = new Packages_Products_Suppliers();
-
-                    var id = productSupplierid.ToList();
-
-                    foreach (var item in id)
-                    {
-                        pkgAddPro.ProductSupplierId = item.ProductSupplierId;
-                    }
-                    pkgAddPro.PackageId = Convert.ToInt32(txtpkgID.Text);
-
-                    Packages_Products_SuppliersDB.AddPackageProduct(pkgAddPro);
-
-                    MessageBox.Show("Proucts Added");
-
-                    PackProductUpdate();
-
+                    MessageBox.Show("Product Already in the Packages OR Product/Suppleir not Selected for Add");
                 }
             }
-            
             catch
             {
-
-                MessageBox.Show("Product Already in the Packages");
+                MessageBox.Show("Please Select Package to ADD products..");
             }
+
             
             
 
@@ -861,7 +869,7 @@ namespace BrogrammersWorkshop
             catch
 
             {
-                MessageBox.Show("Please Select an item to Delete");
+                MessageBox.Show("Please Select an Package+Product  to Delete");
             }
 
                
@@ -1036,7 +1044,7 @@ namespace BrogrammersWorkshop
             catch
             {
 
-                MessageBox.Show("Cannot Delete at this moment as this supplied id is linked with  booking details table");
+                MessageBox.Show("Cannot Delete at this moment as this supplied id is linked with  booking details table.Plaese select another one to delete");
             }
       
                 
