@@ -167,6 +167,7 @@ namespace BrogrammersWorkshop
 
             {
 
+
                 //JARED - not really sure what this does
 
                 DateTime? StartDate = string.IsNullOrWhiteSpace(txtPkgStrt.Text)
@@ -177,7 +178,22 @@ namespace BrogrammersWorkshop
                   ? (DateTime?)null
                   : DateTime.Parse(txtPkgEndDate.Text);
 
+                var duration =( EndDate.Value - StartDate.Value).TotalDays;
+               
+               if (duration < 0 | duration == 0)
+                {
+                    MessageBox.Show("Package End Date must be greater than Package Start Date");
+                    return;
+                }
 
+
+          
+            
+                if (Convert.ToDecimal(txtCommission.Text.Replace("$", "")) >= Convert.ToDecimal(txtBasePrice.Text.Replace("$", "")))
+                {
+                    MessageBox.Show("Commission Should be less than Package Price");
+                    return;
+                }
 
 
                 Packages pckAdd = new Packages();
@@ -232,9 +248,11 @@ namespace BrogrammersWorkshop
                 txtPkgStrt.ReadOnly = false;
                 txtPkgEndDate.ReadOnly = false;
                 txtBasePrice.ReadOnly = false;
-
+                txtBasePrice.Text= txtBasePrice.Text.Replace("$", "");
                 txtCommission.ReadOnly = false;
+                txtCommission.Text = txtCommission.Text.Replace("$", "");
                 txtDesc.ReadOnly = false;
+
 
                 txtCommission.ReadOnly = false;
 
@@ -302,6 +320,20 @@ namespace BrogrammersWorkshop
                 DateTime? EndDate = string.IsNullOrWhiteSpace(txtPkgEndDate.Text)
                   ? (DateTime?)null
                   : DateTime.Parse(txtPkgEndDate.Text);
+
+                var duration = (EndDate.Value - StartDate.Value).TotalDays;
+
+                if (duration < 0 | duration == 0)
+                {
+                    MessageBox.Show("Package End Date must be greater than Package Start Date");
+                    return;
+                }
+
+                if (Convert.ToDecimal(txtCommission.Text.Replace("$", "")) >= Convert.ToDecimal(txtBasePrice.Text.Replace("$", "")))
+                {
+                    MessageBox.Show("Commission Should be less than Package Price");
+                    return;
+                }
 
 
                 Packages updtPck = new Packages();
