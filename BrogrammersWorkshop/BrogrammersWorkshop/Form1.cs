@@ -443,6 +443,17 @@ namespace BrogrammersWorkshop
             comboProduct.DataSource = product;
 
 
+            List<int> suppupdated = SuppliersDB.GetSupplierIDs();
+            List<string> supplier = new List<string>();
+
+            foreach (var sup in suppupdated)
+            {
+                supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
+            }
+
+            comboSupplier.DataSource = null;
+            comboSupplier.DataSource = supplier;
+
 
 
         }
@@ -451,6 +462,7 @@ namespace BrogrammersWorkshop
         {
             Suppliers suppAdd = new Suppliers();
 
+            List<int> supp = SuppliersDB.GetSupplierIDs();
             var newsuppindex = supp[supp.Count - 1] + 1;
 
             suppAdd.SupplierID= newsuppindex ;
@@ -474,7 +486,20 @@ namespace BrogrammersWorkshop
             {
                 supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
             }
+
+            comboSupplier.DataSource = null;
             comboSupplier.DataSource = supplier;
+
+
+            List<int> prod = ProductsDB.GetProductID();
+            List<string> product = new List<string>();
+
+            foreach (var prd in prod)
+            {
+                product.Add(ProductsDB.GetProduct(prd).ProdName);
+            }
+            comboProduct.DataSource = null;
+            comboProduct.DataSource = product;
 
 
         }
@@ -613,6 +638,17 @@ namespace BrogrammersWorkshop
             comboProduct.DataSource = null;
             comboProduct.DataSource = product;
 
+            List<int> suppupdated = SuppliersDB.GetSupplierIDs();
+            List<string> supplier = new List<string>();
+
+            foreach (var sup in suppupdated)
+            {
+                supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
+            }
+
+            comboSupplier.DataSource = null;
+            comboSupplier.DataSource = supplier;
+
         }
         
 
@@ -632,6 +668,18 @@ namespace BrogrammersWorkshop
                 supplier.Add(SuppliersDB.GetSupplier(sup).SupName);
             }
             comboSupplier.DataSource = supplier;
+
+
+
+            List<int> prod = ProductsDB.GetProductID();
+            List<string> product = new List<string>();
+
+            foreach (var prd in prod)
+            {
+                product.Add(ProductsDB.GetProduct(prd).ProdName);
+            }
+            comboProduct.DataSource = null;
+            comboProduct.DataSource = product;
 
         }
 
