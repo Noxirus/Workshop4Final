@@ -722,7 +722,15 @@ namespace BrogrammersWorkshop
 
                 Products_SuppliersDB.AddProdSupplier(addPrdSupp);
                 MessageBox.Show("Product Supplier Added");
+                gridProductSuppliers.DataSource = null;
                 gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
+                gridProductSuppliers.Columns[0].Visible = false;
+                gridProductSuppliers.Columns[1].HeaderText = "Product Supplier ID";
+                gridProductSuppliers.Columns[2].HeaderText = "Product Name";
+                gridProductSuppliers.Columns[3].HeaderText = "Supplier Name";
+                gridProductSuppliers.Columns[1].Width = 150;
+                gridProductSuppliers.Columns[2].Width = 300;
+                gridProductSuppliers.Columns[3].Width = 300;
                 ResetProductList();
                 ResetSupplierList();
                 ResetPrdSupplierPage();
