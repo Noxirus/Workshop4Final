@@ -1133,6 +1133,7 @@
             this.txtSupplier.CustomButton.UseSelectable = true;
             this.txtSupplier.CustomButton.Visible = false;
             this.txtSupplier.FontSize = MetroFramework.MetroTextBoxSize.Medium;
+            this.txtSupplier.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
             this.txtSupplier.Lines = new string[0];
             this.txtSupplier.Location = new System.Drawing.Point(629, 490);
             this.txtSupplier.MaxLength = 32767;

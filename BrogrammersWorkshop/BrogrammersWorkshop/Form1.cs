@@ -557,6 +557,7 @@ namespace BrogrammersWorkshop
             }
             else
             {
+                
                 txtSupplier.Visible = true;
                 btnUpdateSupplier.Visible = true;
                 lblSupplierName.Visible = true;
@@ -674,7 +675,7 @@ namespace BrogrammersWorkshop
 
 
         public void updateSupplierName(string supplierName,string updatedsupplierName)
-        {
+        {   List<int> supp = SuppliersDB.GetSupplierIDs();
             foreach (var item in supp)
             {
 
