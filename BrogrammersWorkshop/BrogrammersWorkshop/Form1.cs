@@ -225,24 +225,28 @@ namespace BrogrammersWorkshop
         // EDIT Packages 
         private void pkgEdit_Click(object sender, EventArgs e)
         {
-            txtPkgName.ReadOnly = false;
-            txtPkgStrt.ReadOnly = false;
-            txtPkgEndDate.ReadOnly = false;
-            txtBasePrice.ReadOnly = false;
+            if (
+                Validation.IsListSelected(lstPkg, "Available Packages")
+                )
+            {
+                txtPkgName.ReadOnly = false;
+                txtPkgStrt.ReadOnly = false;
+                txtPkgEndDate.ReadOnly = false;
+                txtBasePrice.ReadOnly = false;
 
-            txtCommission.ReadOnly = false;
-            txtDesc.ReadOnly = false;
+                txtCommission.ReadOnly = false;
+                txtDesc.ReadOnly = false;
 
-            txtCommission.ReadOnly = false;
+                txtCommission.ReadOnly = false;
 
-            pkgADD.Enabled = false;
-            pkgdelete.Enabled = false;
-            pkgSave.Enabled = false;
-            pkgCancel.Enabled = true;
-            saveEdit.Visible = true;
-            pkgProductAdd.Enabled = true;
-            pkgProductDelete.Enabled = true;
-
+                pkgADD.Enabled = false;
+                pkgdelete.Enabled = false;
+                pkgSave.Enabled = false;
+                pkgCancel.Enabled = true;
+                saveEdit.Visible = true;
+                pkgProductAdd.Enabled = true;
+                pkgProductDelete.Enabled = true;
+            }
         }
         // Save Edit Packages ** Need Validation of Data
         private void saveEdit_Click(object sender, EventArgs e)
