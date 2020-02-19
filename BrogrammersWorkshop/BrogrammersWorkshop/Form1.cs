@@ -652,6 +652,7 @@ namespace BrogrammersWorkshop
         }
         public void updateProductname(string prdName, string updatedprdName)
         {
+            List<int> prod = ProductsDB.GetProductID();
             foreach (var item in prod)
             {
 
