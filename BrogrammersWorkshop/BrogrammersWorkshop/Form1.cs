@@ -84,6 +84,9 @@ namespace BrogrammersWorkshop
             ResetProductList();
             ResetSupplierList();
 
+            dtpPkgStrt.Enabled = false;
+            dtpPkgEndDate.Enabled = false;
+
         }
 
         private void lstPkg_SelectedIndexChanged(object sender, EventArgs e)
@@ -93,6 +96,7 @@ namespace BrogrammersWorkshop
 
 
             PackProductUpdate();
+            lblError.Text = "";
         }
 
 
@@ -118,10 +122,10 @@ namespace BrogrammersWorkshop
 
             txtPkgName.ReadOnly = false;
             txtPkgName.Text = "";
-            txtPkgStrt.ReadOnly = false;
-            txtPkgEndDate.Text = "";
-            txtPkgStrt.Text = "";
-            txtPkgEndDate.ReadOnly = false;
+            dtpPkgStrt.Enabled = true;
+            dtpPkgEndDate.Value.ToShortDateString();
+            dtpPkgStrt.Value.ToShortDateString();
+            dtpPkgEndDate.Enabled = true;
             txtBasePrice.ReadOnly = false;
             txtBasePrice.Text = "";
             txtCommission.ReadOnly = false;
@@ -141,6 +145,7 @@ namespace BrogrammersWorkshop
             pkgProductDelete.Enabled = false;
             lstPkg.Visible = false;
             lblavalpkg.Visible = false;
+            lblError.Text = "";
 
         }
         // saving Added Packges **NEED VALIDATION OF DATA
@@ -148,35 +153,29 @@ namespace BrogrammersWorkshop
         {
             if
                          (
-                            Validation.IsPresent(txtPkgName, "Package Name") &&
+                            Validation.IsPresent(txtPkgName, "Package Name", lblError) &&
 
-                            Validation.IsPresent(txtPkgStrt, "Package Start Date") &&
-                            Validation.IsCurrectDateTime(txtPkgStrt, "Package Start Date") &&
+                            Validation.IsPresent(txtBasePrice, "Base Price", lblError) &&
+                            Validation.NotNegativeDeciaml(txtBasePrice, "Base Price", lblError) &&
 
-                            Validation.IsPresent(txtPkgEndDate, "Package End Date") &&
-                            Validation.IsCurrectDateTime(txtPkgEndDate, "Package End Date") &&
+                            Validation.IsPresent(txtCommission, "Commission", lblError) &&
+                            Validation.NotNegativeDeciaml(txtCommission, "Commission", lblError) &&
 
-                            Validation.IsPresent(txtBasePrice, "Base Price") &&
-                            Validation.IsADecimal(txtBasePrice, "Base Price") &&
-
-                            Validation.IsPresent(txtCommission, "Commission") &&
-                            Validation.IsADecimal(txtCommission, "Commission") &&
-
-                            Validation.IsPresent(txtDesc, "Description")
+                            Validation.IsPresent(txtDesc, "Description", lblError)
                           )
 
             {
 
-
+                lblError.Text = "";
                 //JARED - not really sure what this does
 
-                DateTime? StartDate = string.IsNullOrWhiteSpace(txtPkgStrt.Text)
+                DateTime? StartDate = string.IsNullOrWhiteSpace(dtpPkgStrt.Text)
                           ? (DateTime?)null
-                          : DateTime.Parse(txtPkgStrt.Text);
+                          : DateTime.Parse(dtpPkgStrt.Text);
 
-                DateTime? EndDate = string.IsNullOrWhiteSpace(txtPkgEndDate.Text)
+                DateTime? EndDate = string.IsNullOrWhiteSpace(dtpPkgEndDate.Text)
                   ? (DateTime?)null
-                  : DateTime.Parse(txtPkgEndDate.Text);
+                  : DateTime.Parse(dtpPkgEndDate.Text);
 
                 var duration =( EndDate.Value - StartDate.Value).TotalDays;
                
@@ -191,7 +190,7 @@ namespace BrogrammersWorkshop
             
                 if (Convert.ToDecimal(txtCommission.Text.Replace("$", "")) >= Convert.ToDecimal(txtBasePrice.Text.Replace("$", "")))
                 {
-                    MessageBox.Show("Commission Should be less than Package Price");
+                    lblError.Text = "Commission Should be less than Package Price";
                     return;
                 }
 
@@ -211,7 +210,7 @@ namespace BrogrammersWorkshop
 
                 List<Packages> packlstAdd = PackagesDB.GetPackages();
 
-                MessageBox.Show("Packages has been Added");
+                //MessageBox.Show("Packages has been Added");
 
                 foreach (var pkg in packlstAdd)
                 {
@@ -241,12 +240,12 @@ namespace BrogrammersWorkshop
         private void pkgEdit_Click(object sender, EventArgs e)
         {
             if (
-                Validation.IsListSelected(lstPkg, "Available Packages")
+                Validation.IsListSelected(lstPkg, "Available Packages", lblError)
                 )
             {
                 txtPkgName.ReadOnly = false;
-                txtPkgStrt.ReadOnly = false;
-                txtPkgEndDate.ReadOnly = false;
+                dtpPkgStrt.Enabled = true;
+                dtpPkgEndDate.Enabled = true;
                 txtBasePrice.ReadOnly = false;
                 txtBasePrice.Text= txtBasePrice.Text.Replace("$", "");
                 txtCommission.ReadOnly = false;
@@ -263,6 +262,7 @@ namespace BrogrammersWorkshop
                 saveEdit.Visible = true;
                 pkgProductAdd.Enabled = true;
                 pkgProductDelete.Enabled = true;
+                lblError.Text = "";
             }
         }
         // Save Edit Packages ** Need Validation of Data
@@ -270,21 +270,16 @@ namespace BrogrammersWorkshop
         {
             if
              (
-                Validation.IsPresent(txtPkgName, "Package Name") &&
+                Validation.IsPresent(txtPkgName, "Package Name", lblError) &&
 
-                Validation.IsPresent(txtPkgStrt, "Package Start Date") &&
-                Validation.IsCurrectDateTime(txtPkgStrt, "Package Start Date") &&
 
-                Validation.IsPresent(txtPkgEndDate, "Package End Date") &&
-                Validation.IsCurrectDateTime(txtPkgEndDate, "Package End Date") &&
+                Validation.IsPresent(txtBasePrice, "Base Price", lblError) &&
+                Validation.NotNegativeDeciaml(txtBasePrice, "Base Price", lblError) &&
 
-                Validation.IsPresent(txtBasePrice, "Base Price") &&
-                Validation.IsADecimal(txtBasePrice, "Base Price") &&
+                Validation.IsPresent(txtCommission, "Commission", lblError) &&
+                Validation.NotNegativeDeciaml(txtCommission, "Commission", lblError) &&
 
-                Validation.IsPresent(txtCommission, "Commission") &&
-                Validation.IsADecimal(txtCommission, "Commission") &&
-
-                Validation.IsPresent(txtDesc, "Description")
+                Validation.IsPresent(txtDesc, "Description", lblError)
               )
 
             {
@@ -313,13 +308,13 @@ namespace BrogrammersWorkshop
 
 
                 }
-                DateTime? StartDate = string.IsNullOrWhiteSpace(txtPkgStrt.Text)
+                DateTime? StartDate = string.IsNullOrWhiteSpace(dtpPkgStrt.Text)
                         ? (DateTime?)null
-                        : DateTime.Parse(txtPkgStrt.Text);
+                        : DateTime.Parse(dtpPkgStrt.Text);
 
-                DateTime? EndDate = string.IsNullOrWhiteSpace(txtPkgEndDate.Text)
+                DateTime? EndDate = string.IsNullOrWhiteSpace(dtpPkgEndDate.Text)
                   ? (DateTime?)null
-                  : DateTime.Parse(txtPkgEndDate.Text);
+                  : DateTime.Parse(dtpPkgEndDate.Text);
 
                 var duration = (EndDate.Value - StartDate.Value).TotalDays;
 
@@ -348,7 +343,7 @@ namespace BrogrammersWorkshop
 
 
                 PackagesDB.UpdatePackage(oldPck, updtPck);
-                MessageBox.Show("Packages has been updated");
+                //MessageBox.Show("Packages has been updated");
                 lstPkg.Items.Clear();
                 List<Packages> packupdated = PackagesDB.GetPackages();
 
@@ -372,69 +367,74 @@ namespace BrogrammersWorkshop
             List<Packages> pack = PackagesDB.GetPackages();
 
             if (
-                Validation.IsListSelected(lstPkg, "Available Packages")
+                Validation.IsListSelected(lstPkg, "Available Packages", lblError)
                 )
 
             {
-                foreach (var item in pack)
+
+                if (MessageBox.Show("Delete Package?", "Delete Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
-                    if (item.PackageId == Convert.ToInt32(txtpkgID.Text)) // txt box is one number ahead of newly added items
+                    lblError.Text = "";
+                    foreach (var item in pack)
                     {
+                        if (item.PackageId == Convert.ToInt32(txtpkgID.Text)) // txt box is one number ahead of newly added items
+                        {
 
-                        pkgDel.PackageId = item.PackageId;
-                        pkgDel.PkgName = item.PkgName;
-                        pkgDel.PkgStartDate = item.PkgStartDate;
-                        pkgDel.PkgEndDate = item.PkgEndDate;
-                        pkgDel.PkgDesc = item.PkgDesc;
-                        pkgDel.PkgBasePrice = item.PkgBasePrice;
-                        pkgDel.PkgAgencyCommission = item.PkgAgencyCommission;
+                            pkgDel.PackageId = item.PackageId;
+                            pkgDel.PkgName = item.PkgName;
+                            pkgDel.PkgStartDate = item.PkgStartDate;
+                            pkgDel.PkgEndDate = item.PkgEndDate;
+                            pkgDel.PkgDesc = item.PkgDesc;
+                            pkgDel.PkgBasePrice = item.PkgBasePrice;
+                            pkgDel.PkgAgencyCommission = item.PkgAgencyCommission;
 
 
+                        }
                     }
+
+
+                    var productSupplierid = from item in Products_SuppliersDB.GetProductsSuppliers()
+                                            where item.PackageId == Convert.ToInt32(txtpkgID.Text)
+                                            select new { item.ProductSupplierId };
+
+
+                    Packages_Products_Suppliers pkgDelPro = new Packages_Products_Suppliers();
+
+                    var id = productSupplierid.ToList();
+
+                    foreach (var item in id)
+                    {
+                        pkgDelPro.ProductSupplierId = item.ProductSupplierId;
+                    }
+                    pkgDelPro.PackageId = Convert.ToInt32(txtpkgID.Text);
+
+                    Packages_Products_SuppliersDB.DeletePackagePro(pkgDelPro);
+
+
+
+                    PackagesDB.DeletePackage(pkgDel);
+                    lstPkg.Items.Clear();
+
+
+
+
+                    List<Packages> packupdatedel = PackagesDB.GetPackages();
+                    foreach (var pkg in packupdatedel)
+                    {
+                        lstPkg.Items.Add(pkg.PkgName);
+                    }
+
+
+
+                    ResetPackage();
                 }
-
-
-                var productSupplierid = from item in Products_SuppliersDB.GetProductsSuppliers()
-                                        where item.PackageId == Convert.ToInt32(txtpkgID.Text)
-                                        select new { item.ProductSupplierId };
-
-
-                Packages_Products_Suppliers pkgDelPro = new Packages_Products_Suppliers();
-
-                var id = productSupplierid.ToList();
-
-                foreach (var item in id)
-                {
-                    pkgDelPro.ProductSupplierId = item.ProductSupplierId;
-                }
-                pkgDelPro.PackageId = Convert.ToInt32(txtpkgID.Text);
-
-                Packages_Products_SuppliersDB.DeletePackagePro(pkgDelPro);
-
-
-
-                PackagesDB.DeletePackage(pkgDel);
-                lstPkg.Items.Clear();
-                MessageBox.Show("Packages has been Deleted");
-
-
-
-                List<Packages> packupdatedel = PackagesDB.GetPackages();
-                foreach (var pkg in packupdatedel)
-                {
-                    lstPkg.Items.Add(pkg.PkgName);
-                }
-
-
-
-                ResetPackage();
-
 
             }
         }
         private void metroTabPage1_Click(object sender, EventArgs e)
         {
             lstPkg.Enabled = true;
+
         }
 
         private void lstProducts_SelectedIndexChanged(object sender, EventArgs e)
@@ -466,7 +466,7 @@ namespace BrogrammersWorkshop
         // Adding Product to Product list ** Need Validation of Data
         private void btnAddSaveProd_Click(object sender, EventArgs e)
         {
-            if (Validation.IsPresent(txtProductName, "Product Name"))
+            if (Validation.IsPresent(txtProductName, "Product Name", lblProdsError))
             {
                 Products prodAdd = new Products();
 
@@ -505,13 +505,14 @@ namespace BrogrammersWorkshop
                 ResetProductSupllierList();
 
                 txtProductName.Text = "";
+                lblProdsError.Text = "";
             }
 
         }
         // Adding Supplier to supplier table  ** Need Validation of Data
         private void btnSaveAddSupp_Click(object sender, EventArgs e)
         {
-            if (Validation.IsPresent(txtSupplier, "Supplier Name"))
+            if (Validation.IsPresent(txtSupplier, "Supplier Name", lblSuppError))
             {
                 Suppliers suppAdd = new Suppliers();
 
@@ -526,7 +527,7 @@ namespace BrogrammersWorkshop
 
                 SuppliersDB.AddSupplier(suppAdd);
 
-                MessageBox.Show("Supplier has been Added");
+                //MessageBox.Show("Supplier has been Added");
 
                 gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
 
@@ -558,6 +559,7 @@ namespace BrogrammersWorkshop
                 ResetProductSupllierList();
 
                 txtSupplier.Text = "";
+                lblSuppError.Text = "";
             }
         }
 
@@ -612,6 +614,7 @@ namespace BrogrammersWorkshop
         {
             ResetSupplierList();
             txtSupplier.Text = "";
+            lblSuppError.Text = "";
 
         }
 
@@ -627,7 +630,7 @@ namespace BrogrammersWorkshop
         // Editing Products in Products table  ** Need Validation of Data
         private void btnEditProducts_Click(object sender, EventArgs e)
         {
-            if (Validation.IsListSelected(lstProducts, "Products"))
+            if (Validation.IsListSelected(lstProducts, "Products", lblProdsError))
             {
                 txtProductName.Visible = true;
                 btnUpdateProduct.Visible = true;
@@ -647,7 +650,7 @@ namespace BrogrammersWorkshop
         //  Editing Supplier in Supplier  Table ** Need Validation of Data
         private void btnEditSupplier_Click(object sender, EventArgs e)
         {
-            if (Validation.IsListSelected(lstSupplier, "Suppliers"))
+            if (Validation.IsListSelected(lstSupplier, "Suppliers", lblSuppError))
 
             {
                 
@@ -669,7 +672,7 @@ namespace BrogrammersWorkshop
         private void btnUpdateProduct_Click(object sender, EventArgs e)
         {
 
-            if(Validation.IsPresent(txtProductName, "Product Name"))
+            if(Validation.IsPresent(txtProductName, "Product Name", lblProdsError))
             { 
                 updateProductname(lstProducts.SelectedItem.ToString(), txtProductName.Text);
 
@@ -701,6 +704,7 @@ namespace BrogrammersWorkshop
 	            comboSupplier.DataSource = supplier;
 
                 txtProductName.Text = "";
+                lblProdsError.Text = "";
             }
 
         }
@@ -709,7 +713,7 @@ namespace BrogrammersWorkshop
         private void btnUpdateSupplier_Click(object sender, EventArgs e)
         {
           	
-			if (Validation.IsPresent(txtSupplier, "Supplier Name"))
+			if (Validation.IsPresent(txtSupplier, "Supplier Name", lblSuppError))
             {
 	            updateSupplierName(lstSupplier.SelectedItem.ToString(), txtSupplier.Text);
 	            gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
@@ -739,6 +743,7 @@ namespace BrogrammersWorkshop
 	            comboProduct.DataSource = product;
 
                 txtSupplier.Text = "";
+                lblSuppError.Text = "";
             }
         }
 
@@ -780,7 +785,7 @@ namespace BrogrammersWorkshop
                 }
 
                 Products_SuppliersDB.AddProdSupplier(addPrdSupp);
-                MessageBox.Show("Product Supplier Added");
+                //MessageBox.Show("Product Supplier Added");
                 gridProductSuppliers.DataSource = null;
                 gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
                 gridProductSuppliers.Columns[0].Visible = false;
@@ -821,7 +826,7 @@ namespace BrogrammersWorkshop
 
 
                     ProductsDB.UpdateProduct(item, updatedProdcut);
-                    MessageBox.Show("Product Updated");
+                    //MessageBox.Show("Product Updated");
 
 
 
@@ -847,7 +852,7 @@ namespace BrogrammersWorkshop
                     SuppliersDB.UpdateSupplier(item, updatedSupplier);
 
 
-                    MessageBox.Show("Supplier Updated");
+                    //MessageBox.Show("Supplier Updated");
 
                 }
 
@@ -899,7 +904,7 @@ namespace BrogrammersWorkshop
 
             updateProductname(gridProductSuppliers.CurrentRow.Cells[2].Value.ToString(), txtPrdSupPrdName.Text);
             updateSupplierName(gridProductSuppliers.CurrentRow.Cells[3].Value.ToString(), txtAddSupSupName.Text);
-            MessageBox.Show("Data Updated");
+            //MessageBox.Show("Data Updated");
 
             gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
             ResetProductList();
@@ -928,10 +933,11 @@ namespace BrogrammersWorkshop
         {
 
             if (
-                Validation.IsListSelected(lstPkg, "Available Packages") &&
-                Validation.IsListSelected(listSuppPkg, "Suppliers")
+                Validation.IsListSelected(lstPkg, "Available Packages", lblProdError) &&
+                Validation.IsListSelected(listSuppPkg, "Suppliers", lblProdError)
                 )
             {
+                lblProdError.Text = "";
                 PackProductUpdate();
                 try
                 {
@@ -952,7 +958,7 @@ namespace BrogrammersWorkshop
 
                         Packages_Products_SuppliersDB.AddPackageProduct(pkgAddPro);
 
-                        MessageBox.Show("Proucts Added");
+                        //MessageBox.Show("Proucts Added");
 
                         PackProductUpdate();
 
@@ -972,10 +978,12 @@ namespace BrogrammersWorkshop
         private void pkgProductDelete_Click(object sender, EventArgs e)
         {
             if (
-                Validation.IsListSelected(lstPkg, "Available Packages")
+                Validation.IsListSelected(lstPkg, "Available Packages", lblProdError)
                 )
             {
-
+                if (MessageBox.Show("Delete Package?", "Delete Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    lblProdError.Text = "";
 
                     var pkgProductName = gridprdpkg.CurrentRow.Cells[0].Value.ToString();
                     var pkgSupplierName = gridprdpkg.CurrentRow.Cells[1].Value.ToString();
@@ -998,9 +1006,10 @@ namespace BrogrammersWorkshop
 
                     Packages_Products_SuppliersDB.DeletePackageProSupplier(pkgDeletePro);
 
-                    MessageBox.Show("Proucts Deleted");
+
 
                     PackProductUpdate();
+                }
             }
 
 
@@ -1036,16 +1045,18 @@ namespace BrogrammersWorkshop
 
             txtPkgName.ReadOnly = true;
 
-            txtPkgStrt.ReadOnly = true;
+            dtpPkgStrt.Enabled = true;
 
 
-            txtPkgEndDate.ReadOnly = true;
+            dtpPkgEndDate.Enabled = true;
             txtBasePrice.ReadOnly = true;
 
             txtCommission.ReadOnly = true;
             txtDesc.ReadOnly = true;
 
             txtCommission.ReadOnly = true;
+
+            lblError.Text = "";
 
 
 
@@ -1077,21 +1088,21 @@ namespace BrogrammersWorkshop
 
                     if (item.PkgStartDate.HasValue)
                     {
-                        txtPkgStrt.Text = item.PkgStartDate.Value.ToShortDateString();
+                        dtpPkgStrt.Text = item.PkgStartDate.Value.ToShortDateString();
                     }
                     else
                     {
-                        txtPkgStrt.Text = "";
+                        dtpPkgStrt.Format = DateTimePickerFormat.Short;
                     }
 
 
                     if (item.PkgEndDate.HasValue)
                     {
-                        txtPkgEndDate.Text = item.PkgEndDate.Value.ToShortDateString();
+                        dtpPkgEndDate.Text = item.PkgEndDate.Value.ToShortDateString();
                     }
                     else
                     {
-                        txtPkgEndDate.Text = "";
+                        dtpPkgEndDate.Format = DateTimePickerFormat.Short;
                     }
 
                 }
@@ -1150,7 +1161,9 @@ namespace BrogrammersWorkshop
         {
             try
             {
-                var productSupplierID = gridProductSuppliers.CurrentRow.Cells[1].Value;
+                if (MessageBox.Show("Delete Product?", "Delete Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    var productSupplierID = gridProductSuppliers.CurrentRow.Cells[1].Value;
                 Products_Suppliers itemDelete = new Products_Suppliers();
                 Packages_Products_Suppliers pkgPrdDelete = new Packages_Products_Suppliers();
 
@@ -1166,7 +1179,7 @@ namespace BrogrammersWorkshop
                 ResetProductSupllierList();
 
 
-                MessageBox.Show("Item Deleted");
+                }
 
             }
             catch
@@ -1218,6 +1231,5 @@ namespace BrogrammersWorkshop
 
         }
 
- 
     }
 }

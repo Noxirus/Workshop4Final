@@ -11,18 +11,19 @@ namespace BrogrammersWorkshop
 {
     class Validation
     {
-        public static bool IsPresent(MetroTextBox txtBox, string name)
+        public static bool IsPresent(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
             if (txtBox.Text == "")
             {
                 isValid = false;
-                MessageBox.Show(name + " needs to be filled out", "Missing Information");
+                lblError.Text = name + " needs to be filled out";
                 txtBox.Focus();
             }
             return isValid;
         }
-        public static bool IsADecimal(MetroTextBox txtBox, string name)
+
+            public static bool IsADecimal(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
             decimal dec;
@@ -30,13 +31,13 @@ namespace BrogrammersWorkshop
             {
 
                 isValid = false;
-                MessageBox.Show(name + " must be a number \nType: Decimal", "Input Error");
+                lblError.Text = name + " must be a number. Type: Decimal";
                 txtBox.SelectAll();
                 txtBox.Focus();
             }
             return isValid;
         }
-        public static bool IsAInt32(MetroTextBox txtBox, string name)
+        public static bool IsNonNegativeInt32(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
             int value;
@@ -44,25 +45,32 @@ namespace BrogrammersWorkshop
             {
 
                 isValid = false;
-                MessageBox.Show(name + " must be a number \nType: Int32", "Input Error");
+                lblError.Text = name + " must be a number. Type: Int32";
+                txtBox.SelectAll();
+                txtBox.Focus();
+            }
+            else if (value < 0) // negetive
+            {
+                isValid = false;
+                lblError.Text = name + " must be positive or zero";
                 txtBox.SelectAll();
                 txtBox.Focus();
             }
             return isValid;
         }
-        public static bool IsCurrectDateTime(MetroTextBox txtBox, string name)
+        public static bool IsCurrectDateTime(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
             DateTime dt;
             if (!DateTime.TryParseExact(txtBox.Text, "MM/dd/yyyy", null, DateTimeStyles.None, out dt)) 
             {
                 isValid = false;
-                MessageBox.Show("Please eneter " + name + " in format in MM/DD/YYYY", "Input Error");
+                lblError.Text = "Please eneter " + name + " in format in MM/DD/YYYY";
             }
             return isValid;
         }
 
-        public static bool NotNegativeDeciaml(MetroTextBox txtBox, string name)
+        public static bool NotNegativeDeciaml(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
             decimal value;
@@ -72,26 +80,26 @@ namespace BrogrammersWorkshop
             if (!Decimal.TryParse(txtBox.Text, out value))
             {
                 isValid = false;
-                IsADecimal(txtBox, name);
+                IsADecimal(txtBox, name, lblError);
 
             }
             else if (notNegative < 0) // if negative
             {
                 isValid = false;
-                MessageBox.Show(name + "must be positive or zero", "Input Error");
+                lblError.Text = name + " must be positive or zero";
                 txtBox.SelectAll();
                 txtBox.Focus();
             }
             return isValid;
         }
-        public static bool IsListSelected(ListBox list, string name)
+        public static bool IsListSelected(ListBox list, string name, Label lblError)
         {
             bool isValid = true;
             
             if (list.SelectedIndex == -1)
             {
                 isValid = false;
-                MessageBox.Show("Please select a list item from " + name, "Missing Selections");
+                lblError.Text = "Please select a list item from " + name;
             }
             return isValid;
         }
