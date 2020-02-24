@@ -16,6 +16,7 @@ namespace BrogrammersWorkshop
             InitializeComponent();
         }
 
+        //list definitions
         private List<Packages> pack = PackagesDB.GetPackages();
         private List<PackagesProductInfo> packProdSupp = Packages_Products_SuppliersDB.GetPackProductsSuppliers();
         private List<PackagesProductInfo> productSupplierList = Products_SuppliersDB.GetProductsSuppliers();
@@ -25,10 +26,7 @@ namespace BrogrammersWorkshop
         List<string> supplier = new List<string>();
 
 
-
-
-
-
+        //PAGE LOAD
         private void TravelExpert_Load(object sender, EventArgs e)
         {
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -71,7 +69,6 @@ namespace BrogrammersWorkshop
             }
 
 
-
             gridProductSuppliers.Columns[1].HeaderText = "Product Supplier ID";
             gridProductSuppliers.Columns[2].HeaderText = "Product Name";
             gridProductSuppliers.Columns[3].HeaderText = "Supplier Name";
@@ -84,16 +81,14 @@ namespace BrogrammersWorkshop
             ResetProductList();
             ResetSupplierList();
 
+            //disables the DateTimePickers, re-enabled when add or edit button clicked
             dtpPkgStrt.Enabled = false;
             dtpPkgEndDate.Enabled = false;
-
         }
 
         private void lstPkg_SelectedIndexChanged(object sender, EventArgs e)
         {
             PackageListLoad();
-
-
 
             PackProductUpdate();
             lblError.Text = "";
@@ -116,6 +111,7 @@ namespace BrogrammersWorkshop
             gridprdpkg.Columns[1].Width = 200;
 
         }
+
         // Adding Packages  
         public void pkgADD_Click(object sender, EventArgs e)
         {
@@ -148,7 +144,8 @@ namespace BrogrammersWorkshop
             lblError.Text = "";
 
         }
-        // saving Added Packges **NEED VALIDATION OF DATA
+
+        // saving Added Packges 
         private void pkgSave_Click(object sender, EventArgs e)
         {
             if
@@ -167,7 +164,6 @@ namespace BrogrammersWorkshop
             {
 
                 lblError.Text = "";
-                //JARED - not really sure what this does
 
                 DateTime? StartDate = string.IsNullOrWhiteSpace(dtpPkgStrt.Text)
                           ? (DateTime?)null
@@ -181,19 +177,16 @@ namespace BrogrammersWorkshop
                
                if (duration < 0 | duration == 0)
                 {
-                    MessageBox.Show("Package End Date must be greater than Package Start Date");
+                    lblError.Text = "Package End Date must be greater than Package Start Date";
                     return;
                 }
 
-
-          
             
                 if (Convert.ToDecimal(txtCommission.Text.Replace("$", "")) >= Convert.ToDecimal(txtBasePrice.Text.Replace("$", "")))
                 {
                     lblError.Text = "Commission Should be less than Package Price";
                     return;
                 }
-
 
                 Packages pckAdd = new Packages();
                 pckAdd.PkgName = txtPkgName.Text;
@@ -210,7 +203,6 @@ namespace BrogrammersWorkshop
 
                 List<Packages> packlstAdd = PackagesDB.GetPackages();
 
-                //MessageBox.Show("Packages has been Added");
 
                 foreach (var pkg in packlstAdd)
                 {
@@ -234,8 +226,13 @@ namespace BrogrammersWorkshop
 
                 ResetPackage();
 
+                //disable the Date Time Pickers
+                dtpPkgStrt.Enabled = false;
+                dtpPkgEndDate.Enabled = false;
+
             }
         }
+
         // EDIT Packages 
         private void pkgEdit_Click(object sender, EventArgs e)
         {
@@ -265,7 +262,8 @@ namespace BrogrammersWorkshop
                 lblError.Text = "";
             }
         }
-        // Save Edit Packages ** Need Validation of Data
+
+        // Save Edit Packages 
         private void saveEdit_Click(object sender, EventArgs e)
         {
             if
@@ -320,13 +318,13 @@ namespace BrogrammersWorkshop
 
                 if (duration < 0 | duration == 0)
                 {
-                    MessageBox.Show("Package End Date must be greater than Package Start Date");
+                    lblError.Text = "Package End Date must be greater than Package Start Date";
                     return;
                 }
 
                 if (Convert.ToDecimal(txtCommission.Text.Replace("$", "")) >= Convert.ToDecimal(txtBasePrice.Text.Replace("$", "")))
                 {
-                    MessageBox.Show("Commission Should be less than Package Price");
+                    lblError.Text = "Commission Should be less than Package Price";
                     return;
                 }
 
@@ -341,9 +339,8 @@ namespace BrogrammersWorkshop
                 updtPck.PkgBasePrice = Convert.ToDecimal(txtBasePrice.Text.Replace("$", ""));
                 updtPck.PkgAgencyCommission = Convert.ToDecimal(txtCommission.Text.Replace("$", ""));
 
-
                 PackagesDB.UpdatePackage(oldPck, updtPck);
-                //MessageBox.Show("Packages has been updated");
+
                 lstPkg.Items.Clear();
                 List<Packages> packupdated = PackagesDB.GetPackages();
 
@@ -355,11 +352,10 @@ namespace BrogrammersWorkshop
 
                 lstPkg.SelectedIndex = 0;
 
-
                 ResetPackage();
             }
         }
-        // Deleting Packages from Package ** Need Validation of Data
+        // Deleting Packages from Package
         private void pkgdelete_Click(object sender, EventArgs e)
         {
             Packages pkgDel = new Packages();
@@ -371,7 +367,7 @@ namespace BrogrammersWorkshop
                 )
 
             {
-
+                // delete confirmaiton message box with ok or cancel
                 if (MessageBox.Show("Delete Package?", "Delete Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
                     lblError.Text = "";
@@ -410,13 +406,8 @@ namespace BrogrammersWorkshop
 
                     Packages_Products_SuppliersDB.DeletePackagePro(pkgDelPro);
 
-
-
                     PackagesDB.DeletePackage(pkgDel);
                     lstPkg.Items.Clear();
-
-
-
 
                     List<Packages> packupdatedel = PackagesDB.GetPackages();
                     foreach (var pkg in packupdatedel)
@@ -424,13 +415,12 @@ namespace BrogrammersWorkshop
                         lstPkg.Items.Add(pkg.PkgName);
                     }
 
-
-
                     ResetPackage();
                 }
 
             }
         }
+
         private void metroTabPage1_Click(object sender, EventArgs e)
         {
             lstPkg.Enabled = true;
@@ -441,6 +431,7 @@ namespace BrogrammersWorkshop
         {
 
         }
+
         // Adding Product to Product list 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
@@ -452,6 +443,7 @@ namespace BrogrammersWorkshop
             txtProductName.Focus();
 
         }
+
         // adding Supplier in Supplier data table 
         private void btnAddSupplier_Click(object sender, EventArgs e)
         {
@@ -463,6 +455,7 @@ namespace BrogrammersWorkshop
             txtSupplier.Focus();
 
         }
+
         // Adding Product to Product list ** Need Validation of Data
         private void btnAddSaveProd_Click(object sender, EventArgs e)
         {
@@ -472,8 +465,6 @@ namespace BrogrammersWorkshop
 
                 prodAdd.ProdName = txtProductName.Text;
 
-
-          
             List<int> prod = ProductsDB.GetProductID();
             List<string> product = new List<string>();
 
@@ -498,7 +489,6 @@ namespace BrogrammersWorkshop
 
                 ProductsDB.AddProduct(prodAdd);
 
-
                 gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
                 ResetProductList();
                 ResetPrdSupplierPage();
@@ -507,9 +497,9 @@ namespace BrogrammersWorkshop
                 txtProductName.Text = "";
                 lblProdsError.Text = "";
             }
-
         }
-        // Adding Supplier to supplier table  ** Need Validation of Data
+
+        // Adding Supplier to supplier table 
         private void btnSaveAddSupp_Click(object sender, EventArgs e)
         {
             if (Validation.IsPresent(txtSupplier, "Supplier Name", lblSuppError))
@@ -520,14 +510,11 @@ namespace BrogrammersWorkshop
             List<int> supp = SuppliersDB.GetSupplierIDs();
             var newsuppindex = supp[supp.Count - 1] + 1;
 
-
                 suppAdd.SupplierID = newsuppindex;
 
                 suppAdd.SupName = txtSupplier.Text;
 
                 SuppliersDB.AddSupplier(suppAdd);
-
-                //MessageBox.Show("Supplier has been Added");
 
                 gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
 
@@ -551,6 +538,7 @@ namespace BrogrammersWorkshop
             {
                 product.Add(ProductsDB.GetProduct(prd).ProdName);
             }
+
             comboProduct.DataSource = null;
             comboProduct.DataSource = product;
 
@@ -582,7 +570,6 @@ namespace BrogrammersWorkshop
             lstProducts.Enabled = true;
             btnAddProduct.Visible = true;
             btnAddProduct.Visible = true;
-
 
         }
 
@@ -618,16 +605,15 @@ namespace BrogrammersWorkshop
 
         }
 
-
         // Editing Products in products Table
-
         private void btnResetProduct_Click(object sender, EventArgs e)
         {
             ResetProductList();
             ResetPrdSupplierPage();
             txtProductName.Text = "";
         }
-        // Editing Products in Products table  ** Need Validation of Data
+
+        // Editing Products in Products table  
         private void btnEditProducts_Click(object sender, EventArgs e)
         {
             if (Validation.IsListSelected(lstProducts, "Products", lblProdsError))
@@ -641,12 +627,9 @@ namespace BrogrammersWorkshop
                 txtProductName.Focus();
                 txtProductName.Text = lstProducts.SelectedItem.ToString();
 
-
-
-
             }
-
         }
+
         //  Editing Supplier in Supplier  Table ** Need Validation of Data
         private void btnEditSupplier_Click(object sender, EventArgs e)
         {
@@ -662,9 +645,6 @@ namespace BrogrammersWorkshop
 
                 txtSupplier.Focus();
                 txtSupplier.Text = lstSupplier.SelectedItem.ToString();
-
-
-
 
             }
         }
@@ -706,7 +686,6 @@ namespace BrogrammersWorkshop
                 txtProductName.Text = "";
                 lblProdsError.Text = "";
             }
-
         }
 
 
@@ -730,8 +709,6 @@ namespace BrogrammersWorkshop
 	            }
 	            comboSupplier.DataSource = supplier;
 
-
-
 	            List<int> prod = ProductsDB.GetProductID();
 	            List<string> product = new List<string>();
 
@@ -748,7 +725,6 @@ namespace BrogrammersWorkshop
         }
 
 
-
         private void saveProdSup_Click(object sender, EventArgs e)
         {
             ResetPrdSupplierPage();
@@ -762,9 +738,6 @@ namespace BrogrammersWorkshop
 
                 foreach (var item in prod)
                 {
-
-                    //var newproductSupplierID = Convert.ToInt32(gridProductSuppliers.Rows[gridProductSuppliers.RowCount - 1]);
-                    //newproductSupplierID = gridProductSuppliers.Rows[newproductSupplierID].Cells[0].Value;
 
                     if (comboProduct.SelectedItem.ToString() == ProductsDB.GetProduct(item).ProdName)
                     {
@@ -785,7 +758,6 @@ namespace BrogrammersWorkshop
                 }
 
                 Products_SuppliersDB.AddProdSupplier(addPrdSupp);
-                //MessageBox.Show("Product Supplier Added");
                 gridProductSuppliers.DataSource = null;
                 gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
                 gridProductSuppliers.Columns[0].Visible = false;
@@ -804,13 +776,10 @@ namespace BrogrammersWorkshop
 
             catch
             {
-                MessageBox.Show("Same Product Supplier Already Exist");
+                lblPckProdError.Text = "Same Product Supplier Already Exist";
             }
-
-
-
-
         }
+
         public void updateProductname(string prdName, string updatedprdName)
         {
             List<int> prod = ProductsDB.GetProductID();
@@ -824,14 +793,9 @@ namespace BrogrammersWorkshop
                     updatedProdcut.ProductID = item;
                     updatedProdcut.ProdName = updatedprdName;
 
-
                     ProductsDB.UpdateProduct(item, updatedProdcut);
-                    //MessageBox.Show("Product Updated");
-
-
 
                 }
-
             }
         }
 
@@ -845,29 +809,21 @@ namespace BrogrammersWorkshop
                 {
                     Suppliers updatedSupplier = new Suppliers();
 
-
                     updatedSupplier.SupplierID = item;
                     updatedSupplier.SupName = updatedsupplierName;
 
                     SuppliersDB.UpdateSupplier(item, updatedSupplier);
 
-
-                    //MessageBox.Show("Supplier Updated");
-
                 }
-
-
             }
         }
 
-        // Editing Product_supplier table 
 
+        // Editing Product_supplier table 
         private void btnEditAddProductSupplier_Click(object sender, EventArgs e)
         {
-
                 try
             {
-
 
                 var supplierproductID = gridProductSuppliers.CurrentRow.Cells[1].Value.ToString();
                 txtPrdSupPrdName.Text = gridProductSuppliers.CurrentRow.Cells[2].Value.ToString();
@@ -886,8 +842,6 @@ namespace BrogrammersWorkshop
                 comboSupplier.Visible = false;
                 resetPrdSup.Enabled = true;
 
-
-
             }
 
             catch
@@ -898,13 +852,13 @@ namespace BrogrammersWorkshop
             }
 
         }
-        // Editing Product_supplier table ** Need Validation of Data
+
+        // Editing Product_supplier table 
         private void btnAddPrdSaveEdit_Click(object sender, EventArgs e)
         {
 
             updateProductname(gridProductSuppliers.CurrentRow.Cells[2].Value.ToString(), txtPrdSupPrdName.Text);
             updateSupplierName(gridProductSuppliers.CurrentRow.Cells[3].Value.ToString(), txtAddSupSupName.Text);
-            //MessageBox.Show("Data Updated");
 
             gridProductSuppliers.DataSource = Products_SuppliersDB.GetProductsSuppliers();
             ResetProductList();
@@ -916,7 +870,6 @@ namespace BrogrammersWorkshop
         private void comboPrdPack_SelectedIndexChanged(object sender, EventArgs e)
         {
             listSuppPkg.Items.Clear();
-
 
             foreach (var supname in productSupplierList)
             {
@@ -931,13 +884,15 @@ namespace BrogrammersWorkshop
         private void pkgProductAdd_Click(object sender, EventArgs e)
 
         {
-
+            //shows an error message in a lable if informaiton is input incorrectly 
             if (
                 Validation.IsListSelected(lstPkg, "Available Packages", lblProdError) &&
                 Validation.IsListSelected(listSuppPkg, "Suppliers", lblProdError)
                 )
             {
+                //clears error message if the error has been fixed
                 lblProdError.Text = "";
+
                 PackProductUpdate();
                 try
                 {
@@ -958,17 +913,12 @@ namespace BrogrammersWorkshop
 
                         Packages_Products_SuppliersDB.AddPackageProduct(pkgAddPro);
 
-                        //MessageBox.Show("Proucts Added");
-
-                        PackProductUpdate();
-
-                    
+                        PackProductUpdate();                   
                 }
-
                 catch
                 {
-
-                    MessageBox.Show("Product Already in the Packages OR Product/Suppleir not Selected for Add");
+                    //error message
+                    lblProdError.Text = "Product Already in the Packages OR Product/Suppleir not Selected for Add";
                 }
             }
         }
@@ -981,6 +931,7 @@ namespace BrogrammersWorkshop
                 Validation.IsListSelected(lstPkg, "Available Packages", lblProdError)
                 )
             {
+                // if okay is selected in delete confirmation than continue
                 if (MessageBox.Show("Delete Package?", "Delete Confirmation", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
                     lblProdError.Text = "";
@@ -1006,28 +957,18 @@ namespace BrogrammersWorkshop
 
                     Packages_Products_SuppliersDB.DeletePackageProSupplier(pkgDeletePro);
 
-
-
                     PackProductUpdate();
                 }
             }
-
-
-
-            //  PackProductUpdate();
-
-
         }
 
-
-
-
-
+        //reset button on first tab
         private void pkgCancel_Click(object sender, EventArgs e)
         {
             ResetPackage();
         }
 
+        //reset method
         public void ResetPackage()
         {
             pkgADD.Enabled = true;
@@ -1058,20 +999,16 @@ namespace BrogrammersWorkshop
 
             lblError.Text = "";
 
-
+            dtpPkgStrt.Enabled = false;
+            dtpPkgEndDate.Enabled = false;
 
             PackageListLoad();
-
-
-
         }
 
+        //Package List load method
         public void PackageListLoad()
         {
-
             var pack = PackagesDB.GetPackages();
-
-
 
             foreach (var item in pack)
             {
@@ -1104,22 +1041,14 @@ namespace BrogrammersWorkshop
                     {
                         dtpPkgEndDate.Format = DateTimePickerFormat.Short;
                     }
-
                 }
-
-
-
-
             }
         }
 
+
         private void resetPrdSup_Click(object sender, EventArgs e)
         {
-
-
             ResetPrdSupplierPage();
-
-
         }
 
         public void ResetPrdSupplierPage()
@@ -1177,18 +1106,12 @@ namespace BrogrammersWorkshop
                 ResetSupplierList();
                 ResetPrdSupplierPage();
                 ResetProductSupllierList();
-
-
                 }
-
             }
             catch
             {
-
                 MessageBox.Show("Cannot Delete at this moment as this supplied id is linked with  booking details table.Plaese select another one to delete");
             }
-
-
         }
 
         public void ResetProductSupllierList()
@@ -1203,9 +1126,6 @@ namespace BrogrammersWorkshop
             }
 
             lstPkg.SelectedIndex = 0;
-
-
-
 
             productSupplierList = Products_SuppliersDB.GetProductsSuppliers();
             var distinctPrd = productSupplierList.Select(o => o.ProdName).Distinct().ToList();
@@ -1224,12 +1144,10 @@ namespace BrogrammersWorkshop
             }
         }
 
-
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
-
         }
 
-    }
-}
+    }//end of class
+}//end of namespace

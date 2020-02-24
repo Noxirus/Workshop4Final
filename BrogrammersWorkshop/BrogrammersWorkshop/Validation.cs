@@ -11,6 +11,7 @@ namespace BrogrammersWorkshop
 {
     class Validation
     {
+        //validation for if there is an input present
         public static bool IsPresent(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
@@ -23,7 +24,8 @@ namespace BrogrammersWorkshop
             return isValid;
         }
 
-            public static bool IsADecimal(MetroTextBox txtBox, string name, Label lblError)
+        //validation for if input is a decimal
+        public static bool IsADecimal(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
             decimal dec;
@@ -37,6 +39,8 @@ namespace BrogrammersWorkshop
             }
             return isValid;
         }
+
+        //validation for if it is a non negative int32
         public static bool IsNonNegativeInt32(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
@@ -58,6 +62,8 @@ namespace BrogrammersWorkshop
             }
             return isValid;
         }
+
+        //this is an old validation that is no longer in use
         public static bool IsCurrectDateTime(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
@@ -70,6 +76,7 @@ namespace BrogrammersWorkshop
             return isValid;
         }
 
+        //validation for if it is a non negative decimal
         public static bool NotNegativeDeciaml(MetroTextBox txtBox, string name, Label lblError)
         {
             bool isValid = true;
@@ -92,6 +99,8 @@ namespace BrogrammersWorkshop
             }
             return isValid;
         }
+
+        //validation for if there is a selected item in a list
         public static bool IsListSelected(ListBox list, string name, Label lblError)
         {
             bool isValid = true;

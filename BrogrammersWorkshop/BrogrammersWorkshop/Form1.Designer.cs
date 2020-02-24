@@ -110,6 +110,7 @@
             this.metroPanel1 = new MetroFramework.Controls.MetroPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.lblPckProdError = new System.Windows.Forms.Label();
             this.Packages.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridprdpkg)).BeginInit();
@@ -129,7 +130,7 @@
             this.Packages.FontWeight = MetroFramework.MetroTabControlWeight.Bold;
             this.Packages.Location = new System.Drawing.Point(35, 72);
             this.Packages.Name = "Packages";
-            this.Packages.SelectedIndex = 0;
+            this.Packages.SelectedIndex = 1;
             this.Packages.Size = new System.Drawing.Size(950, 670);
             this.Packages.TabIndex = 1;
             this.Packages.UseCustomForeColor = true;
@@ -721,6 +722,7 @@
             // 
             // metroTabPage2
             // 
+            this.metroTabPage2.Controls.Add(this.lblPckProdError);
             this.metroTabPage2.Controls.Add(this.btnDeleteProdSupplier);
             this.metroTabPage2.Controls.Add(this.lblProductSupplierName);
             this.metroTabPage2.Controls.Add(this.lblProductName);
@@ -1400,6 +1402,16 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // lblPckProdError
+            // 
+            this.lblPckProdError.AutoSize = true;
+            this.lblPckProdError.Font = new System.Drawing.Font("Elephant", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPckProdError.ForeColor = System.Drawing.Color.Red;
+            this.lblPckProdError.Location = new System.Drawing.Point(613, 25);
+            this.lblPckProdError.Name = "lblPckProdError";
+            this.lblPckProdError.Size = new System.Drawing.Size(0, 31);
+            this.lblPckProdError.TabIndex = 15;
+            // 
             // TravelExpert
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 15F);
@@ -1508,5 +1520,6 @@
         private System.Windows.Forms.Label lblProdsError;
         private MetroFramework.Controls.MetroDateTime dtpPkgEndDate;
         private MetroFramework.Controls.MetroDateTime dtpPkgStrt;
+        private System.Windows.Forms.Label lblPckProdError;
     }
 }
